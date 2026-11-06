@@ -1,0 +1,88 @@
+import { TerminalFormDemo } from "@/components/demos/terminal-form-demo";
+
+<ComponentPreview name="terminal-form">
+  <TerminalFormDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="terminal-form" />
+
+## Usage
+
+List the fields and handle the values. It asks one question at a time; Enter answers and moves on, and a last confirm step calls `onSubmit`.
+
+```tsx
+"use client";
+
+import { TerminalForm } from "@/components/mpkcn/terminal-form";
+
+export function Contact() {
+  return (
+    <TerminalForm
+      fields={[
+        { name: "name", autoComplete: "name" },
+        { name: "email", type: "email", autoComplete: "email" },
+        { name: "msg", type: "textarea", placeholder: "what are you building?" },
+      ]}
+      onSubmit={async (values) => {
+        const res = await fetch("/api/contact", { method: "POST", body: JSON.stringify(values) });
+        if (!res.ok) throw new Error("could not send, try again");
+      }}
+    />
+  );
+}
+```
+
+No network call is built in: `onSubmit` gets `{ name, email, msg }` (trimmed) and you send it where you like. Return a string to replace the success line; throw to show an error, and Enter retries.
+
+Answered lines stay on screen with an "edit" button. Fields are required unless `required: false`. `email` and `url` types are checked, and `validate` adds your own rule.
+
+## Examples
+
+### Open the mail app instead
+
+```tsx
+<TerminalForm
+  fields={fields}
+  submitLabel="open mail"
+  onSubmit={({ name, msg }) => {
+    window.location.href = `mailto:you@example.com?subject=${encodeURIComponent(`Hi from ${name}`)}&body=${encodeURIComponent(msg)}`;
+    return "opening your mail app…";
+  }}
+/>
+```
+
+### Custom validation
+
+```tsx
+const fields = [
+  { name: "handle", label: "github", validate: (v) => (/^[\w-]+$/.test(v) ? undefined : "letters, digits and - only") },
+  { name: "website", type: "url", required: false },
+];
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "fields", type: "TerminalFormField[]", default: "—", description: "{ name, label?, type?, required?, placeholder?, autoComplete?, rows?, validate? }. type: text, email, url, tel, password or textarea." },
+    { prop: "onSubmit", type: "(values) => void | string | Promise<void | string>", default: "—", description: "Gets every answer. Return a string for the success line; throw to show an error." },
+    { prop: "command", type: "string | false", default: '"send --message"', description: "Command on the first line; false hides the line." },
+    { prop: "prompt", type: "string", default: '"$"', description: "Prompt in front of the command." },
+    { prop: "submitLabel", type: "string", default: '"send"', description: "Label of the confirm button, shown as \"[ enter ] send\"." },
+    { prop: "pendingMessage", type: "string", default: '"sending…"', description: "Shown while onSubmit is pending." },
+    { prop: "successMessage", type: "string", default: '"done. message sent."', description: "Shown once onSubmit succeeds." },
+    { prop: "allowRestart", type: "boolean", default: "true", description: "Offer a \"new\" button after success." },
+    { prop: "defaultValues", type: "Record<string, string>", default: "{}", description: "Initial answers, by field name." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the form." },
+  ]}
+/>
+
+## Accessibility
+
+- It is a real `form`. Each question is an `input` or `textarea` with a `label` (the prompt text), so autofill and screen readers work.
+- Errors are announced (`role="alert"`), linked with `aria-describedby` and flagged with `aria-invalid`. The key hint is linked too.
+- Sending, success and error lines are in a `role="status"` region.
+- Focus follows the flow: the next question, then the confirm button, then "new". It never moves on first render, so the form does not steal focus from the page.
+- In a textarea, Enter moves on and Shift+Enter adds a line, as the hint under it says.

@@ -1,0 +1,81 @@
+import { SceneCanvasDemo } from "@/components/demos/scene-canvas-demo";
+
+<ComponentPreview name="scene-canvas" flush>
+  <SceneCanvasDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="scene-canvas" />
+
+## Usage
+
+Put it first inside a positioned section, like a hero. It fills that parent behind the content.
+
+```tsx
+import { SceneCanvas } from "@/components/mpkcn/scene-canvas";
+
+export function Hero() {
+  return (
+    <section className="relative isolate min-h-[70vh] overflow-hidden">
+      <SceneCanvas />
+      <div className="relative">
+        <h1>Hello, world.</h1>
+      </div>
+    </section>
+  );
+}
+```
+
+A grid of dots with a slow wave running through it, in the current accent. The grid shifts a few pixels with the pointer. It follows the theme: switching dark and light redraws it in the new color.
+
+### Kept light on the CPU
+
+- Capped at 30 frames per second, one path and one fill per opacity level (6 in all) instead of one per dot.
+- Stops drawing while it is off screen (IntersectionObserver) or the tab is hidden, and starts again when it is back.
+- Draws one still frame under reduced motion, on low-power devices (4 cores or fewer, 4 GB memory or less, Save-Data on, or `<html data-perf="low">`), and on any device whose first 60 frames run well below the cap.
+- Pixel density is capped at 1.5×. Raise `spacing` to draw fewer dots.
+
+## Examples
+
+### Page background
+
+Pass `fullscreen` to cover the viewport behind the whole page (fixed, `-z-10`).
+
+```tsx
+<body>
+  <SceneCanvas fullscreen opacity={0.08} />
+  {children}
+</body>
+```
+
+### Amber, sparser, no parallax
+
+<ComponentPreview
+  name="scene-canvas"
+  flush
+  code={`<SceneCanvas color="amber" spacing={60} parallax={false} />`}
+>
+  <SceneCanvasDemo color="amber" spacing={60} parallax={false} />
+</ComponentPreview>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "fullscreen", type: "boolean", default: "false", description: "Cover the whole viewport behind the page (fixed, below the content) instead of filling the nearest positioned parent." },
+    { prop: "color", type: '"blue" | "amber" | "dim"', default: '"blue"', description: "Accent the dots are drawn in, read from the theme tokens." },
+    { prop: "spacing", type: "number", default: "44", description: "Distance between dots in px. Larger is lighter on the CPU." },
+    { prop: "opacity", type: "number", default: "0.1", description: "Base dot opacity from 0 to 1. The wave moves it ±0.05." },
+    { prop: "parallax", type: "boolean", default: "true", description: "Shift the grid slightly with the pointer." },
+    { prop: "fps", type: "number", default: "30", description: "Frame-rate cap. The wave is slow, so 30 looks smooth at half the cost." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Animate even when the user prefers reduced motion. Only use it behind an explicit action, like a \"play anyway\" button." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the canvas." },
+  ]}
+/>
+
+## Accessibility
+
+- The canvas is decorative: `aria-hidden` and `pointer-events: none`.
+- Under `prefers-reduced-motion: reduce` it draws one still frame and never animates, unless `ignoreReducedMotion` is set (the previews on this site only set it after you click "play anyway").
+- Keep `opacity` low behind text so contrast is not affected.

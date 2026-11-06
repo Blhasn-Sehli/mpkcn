@@ -1,0 +1,100 @@
+import { TmuxBarDemo } from "@/components/demos/tmux-bar-demo";
+
+<ComponentPreview name="tmux-bar">
+  <TmuxBarDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="tmux-bar" />
+
+## Usage
+
+A one-line status bar: session block and windows on the left, your segments and the clock on the right.
+
+```tsx
+import { TmuxBar } from "@/components/mpkcn/tmux-bar";
+
+export function Footer() {
+  return <TmuxBar session="0" windows={["home", "docs", "blog"]} activeWindow={1} host="mysite.dev" />;
+}
+```
+
+Windows show as `0:home 1:docs*`, the active one marked with `*`. Give a window `href` to make it a link or `onSelect` to make it a button.
+
+## Examples
+
+### Pinned to the page
+
+`fixed` docks it to the bottom of the viewport. `scrollProgress` adds how far the page is scrolled, `uptime` how long it has been open. Leave room at the bottom of your page (about 22px).
+
+<ComponentPreview
+  name="tmux-bar"
+  code={`<TmuxBar
+  fixed
+  session="0"
+  windows={[
+    { label: "home", href: "/" },
+    { label: "work", href: "/work" },
+  ]}
+  uptime
+  scrollProgress
+/>`}
+>
+  <TmuxBarDemo uptime scrollProgress />
+</ComponentPreview>
+
+### Status segments
+
+`segments` are your own pieces on the right. `live` adds a pulsing square, `tone` picks a color, `collapse` hides it on narrow screens and `onClick` makes it a button. With `timeZone` and `clockLabel` the clock can show someone else's local time.
+
+<ComponentPreview
+  name="tmux-bar"
+  code={`<TmuxBar
+  windows={[]}
+  segments={[
+    { label: "open to work", live: true, tone: "ink" },
+    { label: "reply < 24h", collapse: true },
+  ]}
+  clockLabel="Tunis"
+  timeZone="Africa/Tunis"
+/>`}
+>
+  <TmuxBarDemo
+    windows={[]}
+    host={undefined}
+    uptime={false}
+    segments={[
+      { label: "open to work", live: true, tone: "ink" },
+      { label: "reply < 24h", collapse: true },
+    ]}
+    clockLabel="Tunis"
+    timeZone="Africa/Tunis"
+  />
+</ComponentPreview>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "session", type: "string", default: '"0"', description: "Session name in the highlighted block." },
+    { prop: "windows", type: "(string | { label; href?; onSelect? })[]", default: '["zsh"]', description: "Windows listed after the session." },
+    { prop: "activeWindow", type: "number", default: "0", description: "Index of the active window." },
+    { prop: "segments", type: "{ label; tone?; live?; collapse?; onClick?; ariaLabel? }[]", default: "[]", description: "Your own segments on the right." },
+    { prop: "host", type: "string", default: "—", description: "Host name in quotes, like tmux's default." },
+    { prop: "clock", type: "boolean", default: "true", description: "Show a HH:MM clock." },
+    { prop: "timeZone", type: "string", default: "visitor's own", description: "IANA time zone for the clock, e.g. \"Africa/Tunis\"." },
+    { prop: "clockLabel", type: "string", default: "—", description: "Text before the clock." },
+    { prop: "uptime", type: "boolean", default: "false", description: "Time since the page opened." },
+    { prop: "scrollProgress", type: "boolean", default: "false", description: "How far the page is scrolled, in %." },
+    { prop: "fixed", type: "boolean", default: "false", description: "Pin it to the bottom of the viewport." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the bar." },
+  ]}
+/>
+
+## Accessibility
+
+- Windows are a list labelled "Windows". The active one has `aria-current`; with `href` or `onSelect` they are real links or buttons with a visible focus ring.
+- The clock, uptime and scroll value are not live regions, so they never interrupt a screen reader.
+- They render `--:--` on the server and fill in after mount, so there is no hydration mismatch.
+- The `live` square only pulses when motion is allowed.

@@ -1,0 +1,77 @@
+import { SectionDividerDemo } from "@/components/demos/section-divider-demo";
+
+<ComponentPreview name="section-divider" />
+
+## Installation
+
+<InstallTabs name="section-divider" />
+
+## Usage
+
+Place it between two sections. The label links to the next section's id.
+
+```tsx
+import { SectionDivider } from "@/components/mpkcn/section-divider";
+
+export default function Page() {
+  return (
+    <main>
+      <section id="about">…</section>
+      <SectionDivider from="about" to="work" className="my-24" />
+      <section id="work">…</section>
+    </main>
+  );
+}
+```
+
+When 60% of the divider is visible, the two hairlines grow out from the middle, the label pops in, and `EOF about $ cd ../work` types itself. When it leaves the viewport it resets, so it plays again on the way back. Clicking the label smooth-scrolls to `#work`.
+
+## Examples
+
+### Custom path
+
+A `to` that starts with `~` or `/` is shown as is, without `../`:
+
+<ComponentPreview name="section-divider" code={`<SectionDivider from="contact" to="~" href="#top" />`}>
+  <SectionDividerDemo from="contact" to="~" />
+</ComponentPreview>
+
+### Command only, no link
+
+Leave out `from` to drop the `EOF` part. `href={null}` renders plain text instead of a link.
+
+```tsx
+<SectionDivider to="appendix" href={null} />
+```
+
+### Hook into navigation
+
+`onNavigate` fires after a click, for example to send an analytics event or close a menu.
+
+```tsx
+<SectionDivider from="work" to="contact" onNavigate={() => track("divider-click")} />
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "from", type: "string", default: "—", description: "Section you are leaving. Shown dimmed as \"EOF {from}\". Leave empty to show only the command." },
+    { prop: "to", type: "string", default: "—", description: "Section you are going to. Shown as \"$ cd ../{to}\", or \"$ cd {to}\" when it starts with \"~\" or \"/\"." },
+    { prop: "href", type: "string | null", default: '"#{to}"', description: "Where the label links to. null renders plain text instead of a link." },
+    { prop: "onNavigate", type: "() => void", default: "—", description: "Called when the label is clicked, after the smooth scroll to an in-page anchor." },
+    { prop: "typing", type: "boolean", default: "true", description: "Type the label in once the lines have grown. false shows it at once." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Animate even when the user prefers reduced motion. Only use it behind an explicit action, like a \"play anyway\" button." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the root element. Vertical spacing is up to you." },
+  ]}
+/>
+
+## Accessibility
+
+- The label is a regular link with a visible focus ring. Its accessible name is the full command (for example "EOF about $ cd ../work"), read from a visually hidden copy; the typed characters and the cursor are `aria-hidden`.
+- The hairlines are decorative and hidden from assistive technology.
+- Under `prefers-reduced-motion: reduce` the label appears with no typing, the lines don't grow, and clicking jumps instead of smooth-scrolling.
+
+<Callout type="warn">
+  The divider is hidden (opacity 0, lines collapsed) until JavaScript sees it in the viewport. That is fine for a decorative break, but don't make it the only way to reach a section.
+</Callout>

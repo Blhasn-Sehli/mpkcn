@@ -1,0 +1,79 @@
+import { EyebrowDemo } from "@/components/demos/eyebrow-demo";
+
+<ComponentPreview name="eyebrow" />
+
+## Installation
+
+<InstallTabs name="eyebrow" />
+
+## Usage
+
+Put it right above a section heading:
+
+```tsx
+import { Eyebrow } from "@/components/mpkcn/eyebrow";
+
+export function Work() {
+  return (
+    <section id="work">
+      <Eyebrow text="// 02 — selected work" />
+      <h2>Things I built</h2>
+    </section>
+  );
+}
+```
+
+Each time the label scrolls into view (80% visible) it clears and types itself back in at 32ms per character, with a blinking block cursor. The server renders the full text, so it is there before JavaScript runs.
+
+## Examples
+
+### Custom text
+
+<ComponentPreview name="eyebrow" code={`<Eyebrow text="~/projects $ ls -la" />`}>
+  <EyebrowDemo text="~/projects $ ls -la" />
+</ComponentPreview>
+
+### Type once, slower
+
+`replay={false}` types it only the first time; `speed` sets the milliseconds per character.
+
+```tsx
+<Eyebrow text="// 01 — about" replay={false} speed={60} />
+```
+
+### Static label
+
+`typing={false}` keeps the style and drops the animation.
+
+```tsx
+<Eyebrow text="// changelog" typing={false} />
+```
+
+### As a heading
+
+The default element is a `p`. Pass `as` when the label is part of your outline:
+
+```tsx
+<Eyebrow as="h2" text="// 03 — stack" className="mb-4" />
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "text", type: "string", default: "—", description: "The label, e.g. \"// 02 — projects\"." },
+    { prop: "as", type: "React.ElementType", default: '"p"', description: "Element to render. Use \"h2\" or similar when the label is part of your heading structure." },
+    { prop: "typing", type: "boolean", default: "true", description: "Type the label in when it scrolls into view. false shows it as plain text." },
+    { prop: "speed", type: "number", default: "32", description: "Milliseconds per typed character." },
+    { prop: "replay", type: "boolean", default: "true", description: "Clear the label when it leaves the viewport, so it types again next time." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Type even when the user prefers reduced motion. Only use it behind an explicit action, like a \"play anyway\" button." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the root element." },
+  ]}
+/>
+
+## Accessibility
+
+- Screen readers get the full label once, from a visually hidden copy. The typed characters and the cursor are `aria-hidden`, so nothing is announced letter by letter.
+- The untyped part of the text is still laid out (invisible), so the line never changes width or wraps differently while typing.
+- Under `prefers-reduced-motion: reduce` the label is simply shown, with no typing and no cursor.
+- Server and client render the same full text, so there is no hydration mismatch.

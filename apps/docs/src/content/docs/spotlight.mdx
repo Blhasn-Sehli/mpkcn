@@ -1,0 +1,59 @@
+import { SpotlightDemo } from "@/components/demos/spotlight-demo";
+
+<ComponentPreview name="spotlight">
+  <SpotlightDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="spotlight" />
+
+## Usage
+
+Use it in place of a `div` around a card or panel. It takes every `div` prop, and the glow appears while the pointer hovers it.
+
+```tsx
+import { Spotlight } from "@/components/mpkcn/spotlight";
+
+export function StatCard() {
+  return (
+    <Spotlight className="border border-mpk-line bg-mpk-bg-soft p-5">
+      <p className="font-mpk-mono text-xs text-mpk-dim">$ uptime</p>
+      <p className="mt-2 text-mpk-ink">up 42 days</p>
+    </Spotlight>
+  );
+}
+```
+
+The glow is a CSS radial gradient placed from two custom properties, `--mx` and `--my`, that are updated on pointer move. React never re-renders while it moves.
+
+## Examples
+
+### Amber, smaller and stronger
+
+<ComponentPreview
+  name="spotlight"
+  code={`<Spotlight color="amber" size={220} strength={0.22} className="border border-mpk-line bg-mpk-bg-soft p-5">
+  …
+</Spotlight>`}
+>
+  <SpotlightDemo color="amber" size={220} strength={0.22} />
+</ComponentPreview>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "color", type: '"blue" | "amber"', default: '"blue"', description: "Accent the glow is tinted with." },
+    { prop: "size", type: "number", default: "360", description: "Diameter of the glow circle in px." },
+    { prop: "strength", type: "number", default: "0.14", description: "Glow strength from 0 to 1 on the dark theme. The light theme uses half." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Follow the pointer even when the user prefers reduced motion. Use sparingly." },
+    { prop: "...props", type: 'ComponentProps<"div">', default: "—", description: "Any div prop: className, style, onPointerMove (still called), aria attributes, and so on." },
+  ]}
+/>
+
+## Accessibility
+
+- The glow layer is `aria-hidden` and `pointer-events: none`, behind your content (the wrapper is `isolate`), so text and clicks are untouched.
+- It reacts to a mouse only. On touch screens (`hover: none`) and under `prefers-reduced-motion: reduce` there is no glow, unless `ignoreReducedMotion` is set.
+- It adds no role and no focus stop: it is a plain `div` with your content inside.

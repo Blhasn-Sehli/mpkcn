@@ -19,20 +19,23 @@ export function RevealDemo({
   from,
   stagger = 0.12,
   compact = false,
+  limit,
 }: {
   /** Show only one direction (all four when omitted). */
   from?: From;
   stagger?: number;
   compact?: boolean;
+  /** Show only the first N directions (e.g. 2 in a small gallery card). */
+  limit?: number;
 }) {
   const [run, setRun] = useState(0);
   const [force, setForce] = useState(false);
   const reduced = usePrefersReducedMotion();
-  const items = from ? DEFAULT_ITEMS.filter((i) => i.from === from) : DEFAULT_ITEMS;
+  const items = (from ? DEFAULT_ITEMS.filter((i) => i.from === from) : DEFAULT_ITEMS).slice(0, limit);
 
   return (
     <div className="relative w-full">
-      <div key={run} className={`grid gap-3 ${items.length > 1 ? "sm:grid-cols-2" : ""}`}>
+      <div key={run} className={`grid ${compact ? "gap-2" : "gap-3"} ${items.length > 1 ? (compact ? "grid-cols-2" : "sm:grid-cols-2") : ""}`}>
         {items.map((item, i) => (
           <Reveal key={item.from} from={item.from} delay={i * stagger} once={false} ignoreReducedMotion={force}>
             <div className={`border border-mpk-line bg-mpk-bg-soft ${compact ? "p-3" : "p-4"}`}>

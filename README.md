@@ -4,7 +4,7 @@
 
 **Terminal-style React components you copy, paste and own.**
 
-[Docs](https://blhasn-sehli.github.io/mpkcn/) · [Components](https://blhasn-sehli.github.io/mpkcn/docs/components/boot-screen/) · [Changelog](https://blhasn-sehli.github.io/mpkcn/docs/changelog/)
+[Docs](https://blhasn-sehli.github.io/mpkcn/) · [Gallery](https://blhasn-sehli.github.io/mpkcn/components/) · [Changelog](https://blhasn-sehli.github.io/mpkcn/docs/changelog/)
 
 [![CI](https://github.com/Blhasn-Sehli/mpkcn/actions/workflows/ci.yml/badge.svg)](https://github.com/Blhasn-Sehli/mpkcn/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-e8a33d.svg)](LICENSE)
@@ -18,11 +18,14 @@
 
 ## Components
 
-| Component | What it does |
+24 components, all running live in the **[gallery](https://blhasn-sehli.github.io/mpkcn/components/)**:
+
+| Group | Components |
 | --- | --- |
-| [Boot Screen](https://blhasn-sehli.github.io/mpkcn/docs/components/boot-screen/) | A login-style intro that types itself out, rains a little matrix and gets out of the way. |
-| [Theme Toggle](https://blhasn-sehli.github.io/mpkcn/docs/components/theme-toggle/) | Dark/light switch for next-themes, as an icon or a `--dark` flag. |
-| [Reveal](https://blhasn-sehli.github.io/mpkcn/docs/components/reveal/) | Fades and slides content in as it scrolls into view. |
+| Intro & theme | boot-screen, theme-toggle |
+| Terminal | terminal-window, terminal-shell, command-palette, shortcuts-dialog, tmux-bar, terminal-form, konami |
+| Effects | cursor, grain, spotlight, scene-canvas, ascii-image, letter-reveal, reveal |
+| Text & layout | kbd, eyebrow, section-divider, section-rail, image-placeholder, feature-list, scroll-progress, back-to-top |
 
 ## Quick start
 

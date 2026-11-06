@@ -1,0 +1,83 @@
+import { LetterRevealDemo } from "@/components/demos/letter-reveal-demo";
+
+<ComponentPreview name="letter-reveal" />
+
+## Installation
+
+<InstallTabs name="letter-reveal" />
+
+## Usage
+
+```tsx
+import { LetterReveal } from "@/components/mpkcn/letter-reveal";
+
+export function Hero() {
+  return <LetterReveal as="h1" text="Hello, terminal." className="text-5xl font-semibold" />;
+}
+```
+
+Each letter starts 0.7em low, tilted back 80°, and springs into place (stiffness 260, damping 18), 35ms after the one before it. Words never break in the middle. Hovering a letter lifts it and turns it blue.
+
+## Examples
+
+### Slower stagger
+
+<ComponentPreview name="letter-reveal" code={`<LetterReveal text="one letter at a time" stagger={0.08} />`}>
+  <LetterRevealDemo text="one letter at a time" stagger={0.08} />
+</ComponentPreview>
+
+### Replay on every scroll
+
+`trigger="view"` plays the reveal each time the text comes back into view.
+
+```tsx
+<LetterReveal as="h2" text="Selected work" trigger="view" />
+```
+
+### Wait for an intro
+
+`play={false}` keeps the letters hidden until you flip it, for example when a [Boot Screen](/docs/components/boot-screen/) finishes:
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import { BootScreen } from "@/components/mpkcn/boot-screen";
+import { LetterReveal } from "@/components/mpkcn/letter-reveal";
+
+export function Hero() {
+  const [booted, setBooted] = useState(false);
+  return (
+    <>
+      <BootScreen onDone={() => setBooted(true)} />
+      <LetterReveal as="h1" text="Hello, terminal." play={booted} delay={0.2} />
+    </>
+  );
+}
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "text", type: "string", default: "—", description: "The text to animate. Spaces are kept and words never break mid-word." },
+    { prop: "as", type: "React.ElementType", default: '"span"', description: "Element to render, e.g. \"h1\" for a hero heading." },
+    { prop: "delay", type: "number", default: "0", description: "Seconds before the first letter starts." },
+    { prop: "stagger", type: "number", default: "0.035", description: "Seconds between letters." },
+    { prop: "trigger", type: '"mount" | "view"', default: '"mount"', description: "\"mount\" plays once on load; \"view\" replays every time the text scrolls into view." },
+    { prop: "play", type: "boolean", default: "true", description: "Hold the letters hidden until this turns true. Only used with trigger \"mount\"." },
+    { prop: "hover", type: "boolean", default: "true", description: "Letters hop up and turn blue on hover." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Animate even when the user prefers reduced motion. Only use it behind an explicit action, like a \"play anyway\" button." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the root element." },
+  ]}
+/>
+
+## Accessibility
+
+- Screen readers read the text once, whole, from a visually hidden copy. The letter spans are `aria-hidden`, so the heading is never spelled out letter by letter.
+- Under `prefers-reduced-motion: reduce` nothing moves or flips: the letters only fade in, and the hover hop is reduced to the color change.
+- Server and client render the same markup, so there is no hydration mismatch.
+
+<Callout type="warn">
+  The letters start at opacity 0 until JavaScript runs. The hidden copy keeps the text available to screen readers and search engines, but sighted users without JavaScript see an empty heading.
+</Callout>

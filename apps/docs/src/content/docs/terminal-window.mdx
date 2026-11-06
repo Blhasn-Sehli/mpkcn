@@ -1,0 +1,100 @@
+import { TerminalWindowDemo } from "@/components/demos/terminal-window-demo";
+
+<ComponentPreview name="terminal-window">
+  <TerminalWindowDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="terminal-window" />
+
+## Usage
+
+Pass the lines to type. Each line is a `command` typed after the prompt, then its `output`. Typing starts when the window scrolls into view.
+
+```tsx
+import { TerminalWindow } from "@/components/mpkcn/terminal-window";
+
+export function Install() {
+  return (
+    <TerminalWindow
+      title="~/app — zsh"
+      lines={[
+        { command: "npx mpkcn add boot-screen", output: "✓ created boot-screen.tsx" },
+        { command: "pnpm dev", output: "ready on http://localhost:3000" },
+      ]}
+    />
+  );
+}
+```
+
+Outputs are React nodes, so they can hold colors, links or whole components. Change the window's `key` to replay the typing.
+
+## Examples
+
+### Content after the typing
+
+`children` appear once every line is typed. Use it for the part people interact with: links, buttons, a form.
+
+<ComponentPreview
+  name="terminal-window"
+  code={`<TerminalWindow
+  title="~/contact — zsh"
+  lines={[{ command: "contact --init", output: "> 2 channels open. pick one." }]}
+>
+  <ul>
+    <li><a href="mailto:you@example.com">/mail  you@example.com</a></li>
+    <li><a href="https://github.com/you">/github  github.com/you</a></li>
+  </ul>
+</TerminalWindow>`}
+>
+  <TerminalWindowDemo
+    title="~/contact — zsh"
+    lines={[
+      { command: "contact --init", output: "> 2 channels open. pick one." },
+      { output: "/mail     you@example.com" },
+      { output: "/github   github.com/you" },
+    ]}
+  />
+</ComponentPreview>
+
+### Just the chrome
+
+With no `lines`, it is a plain window frame: set `idlePrompt={false}` and put anything inside. Add `onClose` for an "esc" button, or `actions` for your own.
+
+```tsx
+<TerminalWindow title="preview.tsx" idlePrompt={false} onClose={() => setOpen(false)}>
+  <pre>{code}</pre>
+</TerminalWindow>
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "title", type: "ReactNode", default: '"~ — zsh"', description: "Text in the title bar." },
+    { prop: "lines", type: "{ command?: string; output?: ReactNode; prompt?: string }[]", default: "[]", description: "Lines typed one after the other. A line without command shows its output right away." },
+    { prop: "prompt", type: "string", default: '"$"', description: "Prompt in front of every command (a line can override it)." },
+    { prop: "typingSpeed", type: "number", default: "35", description: "Milliseconds per typed character." },
+    { prop: "lineDelay", type: "number", default: "300", description: "Pause after each line, in milliseconds." },
+    { prop: "startOnView", type: "boolean", default: "true", description: "Wait until the window scrolls into view before typing." },
+    { prop: "idlePrompt", type: "boolean", default: "true", description: "Show an empty prompt with a blinking cursor at the end." },
+    { prop: "dots", type: "boolean", default: "true", description: "Show the three window dots." },
+    { prop: "actions", type: "ReactNode", default: "—", description: "Extra content on the right of the title bar." },
+    { prop: "onClose", type: "() => void", default: "—", description: "Adds an \"esc\" close button that calls it." },
+    { prop: "onComplete", type: "() => void", default: "—", description: "Called once every line is typed." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Type even under reduced motion. Only use it behind an explicit action." },
+    { prop: "children", type: "ReactNode", default: "—", description: "Shown under the lines once they finish." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the window." },
+    { prop: "bodyClassName", type: "string", default: "—", description: "Extra classes for the body (padding, height)." },
+  ]}
+/>
+
+`TerminalCursor`, the blinking block, is exported too.
+
+## Accessibility
+
+- Under `prefers-reduced-motion: reduce` every line appears at once, and the cursor stops blinking.
+- Screen readers get each command in full, never half-typed: the typed text is hidden from them and a visually hidden copy carries the whole command.
+- The dots are decorative and hidden. The close button is a real `button` labelled "Close" with a visible focus ring.
+- Content passed as `children` only mounts after the typing, so do not put anything there that must be reachable before it finishes.

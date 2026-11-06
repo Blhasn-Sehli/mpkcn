@@ -1,0 +1,86 @@
+import { BackToTopDemo } from "@/components/demos/back-to-top-demo";
+
+<ComponentPreview name="back-to-top">
+  <BackToTopDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="back-to-top" />
+
+## Usage
+
+Render it once, in your root layout. A small square button fades in at the bottom right after the reader scrolls past most of the first screen.
+
+```tsx
+import { BackToTop } from "@/components/mpkcn/back-to-top";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <main id="main">{children}</main>
+        <BackToTop focusSelector="#main" />
+      </body>
+    </html>
+  );
+}
+```
+
+## Examples
+
+### Inside a scroll container
+
+Pass a ref as `target` and `fixed={false}` to watch and scroll that element, with the button placed in the nearest positioned parent. Here it shows after 120px.
+
+<ComponentPreview
+  name="back-to-top"
+  code={`import { useRef } from "react";
+import { BackToTop } from "@/components/mpkcn/back-to-top";
+
+export function BuildLog() {
+  const ref = useRef<HTMLDivElement>(null);
+  return (
+    <div className="relative h-[300px] border border-mpk-line">
+      <div ref={ref} className="h-full overflow-y-auto p-5">
+        …
+      </div>
+      <BackToTop target={ref} fixed={false} threshold={120} />
+    </div>
+  );
+}`}
+>
+  <BackToTopDemo />
+</ComponentPreview>
+
+### Terminal label
+
+<ComponentPreview name="back-to-top" code={`<BackToTop label="Scroll to top">
+  <span className="text-xs">cd ~</span>
+</BackToTop>`}>
+  <BackToTopDemo label="Scroll to top">
+    <span className="text-xs">cd ~</span>
+  </BackToTopDemo>
+</ComponentPreview>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "target", type: "RefObject<HTMLElement | null>", default: "window", description: "Scroll container to watch and scroll. Leave empty to use the page." },
+    { prop: "fixed", type: "boolean", default: "true", description: "Pin the button to the bottom right of the viewport. false places it in the nearest positioned parent instead (use with target)." },
+    { prop: "threshold", type: "number", default: "0.8", description: "Show the button after this much scroll: below 1 is a share of the visible height, otherwise px." },
+    { prop: "label", type: "string", default: '"Back to top"', description: "Accessible name (and tooltip) of the button." },
+    { prop: "focusSelector", type: "string", default: "—", description: "Element to focus after scrolling up, e.g. \"#main\". Keyboard users then continue from the top." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Scroll smoothly even when the user prefers reduced motion. Use sparingly." },
+    { prop: "children", type: "ReactNode", default: '"↑"', description: "Button content." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the button." },
+  ]}
+/>
+
+## Accessibility
+
+- It is a real `button` with an `aria-label` and a visible focus outline.
+- While hidden it is `inert`: out of the tab order and the accessibility tree, so no one tabs onto an invisible control.
+- Scrolling is smooth by default and jumps instantly under `prefers-reduced-motion: reduce`. The fade-in also turns off.
+- Use `focusSelector` to move keyboard focus to the top of the page after scrolling; otherwise focus would land on `body` once the button hides. Elements that are not focusable get `tabindex="-1"` first.

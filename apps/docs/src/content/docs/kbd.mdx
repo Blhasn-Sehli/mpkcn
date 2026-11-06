@@ -1,0 +1,83 @@
+import { Kbd } from "@/registry/kbd";
+
+<ComponentPreview name="kbd" />
+
+## Installation
+
+<InstallTabs name="kbd" />
+
+## Usage
+
+```tsx
+import { Kbd } from "@/components/mpkcn/kbd";
+
+export function SearchHint() {
+  return (
+    <p>
+      Press <Kbd keys={["Ctrl", "K"]} /> to search.
+    </p>
+  );
+}
+```
+
+`Kbd` is a plain server-friendly component: no state, no effects, no `"use client"`.
+
+## Examples
+
+### Single key
+
+<ComponentPreview
+  name="kbd"
+  code={`<Kbd keys="Esc" />
+<Kbd>Enter ↵</Kbd>`}
+>
+  <div className="flex items-center gap-3">
+    <Kbd keys="Esc" />
+    <Kbd>Enter ↵</Kbd>
+  </div>
+</ComponentPreview>
+
+### Combos and separators
+
+An array renders one badge per key. `separator` changes what goes between them, for example `/` for alternatives or `then` for sequences.
+
+<ComponentPreview
+  name="kbd"
+  code={`<Kbd keys={["Ctrl", "Shift", "P"]} />
+<Kbd keys={["j", "k"]} separator="/" />
+<Kbd keys={["g", "g"]} separator="then" />`}
+>
+  <div className="flex flex-wrap items-center gap-6">
+    <Kbd keys={["Ctrl", "Shift", "P"]} />
+    <Kbd keys={["j", "k"]} separator="/" />
+    <Kbd keys={["g", "g"]} separator="then" />
+  </div>
+</ComponentPreview>
+
+### Inline in small text
+
+Use `size="sm"` inside captions and footers.
+
+```tsx
+<p className="font-mpk-mono text-[11px] text-mpk-dim2">
+  press <Kbd keys="?" size="sm" /> for shortcuts
+</p>
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "keys", type: "string | string[]", default: "—", description: "The key, or the keys of a combo, e.g. \"K\" or [\"Ctrl\", \"K\"]. Ignored when children is set." },
+    { prop: "children", type: "React.ReactNode", default: "—", description: "Custom content for a single key. Takes precedence over keys." },
+    { prop: "separator", type: "React.ReactNode", default: '"+"', description: "Text shown between the keys of a combo." },
+    { prop: "size", type: '"sm" | "md"', default: '"md"', description: "\"sm\" for inline hints in small text, \"md\" for body text." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the outer element." },
+  ]}
+/>
+
+## Accessibility
+
+- Renders the semantic `<kbd>` element. A combo is one outer `<kbd>` wrapping one `<kbd>` per key, as the HTML spec describes for key combinations.
+- The separator is real text, so a screen reader reads "Ctrl + K" rather than "Ctrl K".
+- It is not interactive and takes no focus. If you want the badge to trigger the shortcut on click, wrap it in a `button` with a label.

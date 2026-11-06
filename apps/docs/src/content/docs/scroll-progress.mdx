@@ -1,0 +1,78 @@
+import { ScrollProgressDemo } from "@/components/demos/scroll-progress-demo";
+
+<ComponentPreview name="scroll-progress">
+  <ScrollProgressDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="scroll-progress" />
+
+## Usage
+
+Render it once, in your root layout or on long pages. It pins a thin bar to the top of the viewport that fills as the page is scrolled.
+
+```tsx
+import { ScrollProgress } from "@/components/mpkcn/scroll-progress";
+
+export default function ArticleLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <ScrollProgress />
+      <article>{children}</article>
+    </>
+  );
+}
+```
+
+Updates are batched to one per frame, and the bar moves with `transform`, so it never triggers layout. It also follows content that grows or shrinks.
+
+## Examples
+
+### Track a scroll container
+
+Pass a ref as `target` and `fixed={false}` to place the bar in the nearest positioned parent.
+
+<ComponentPreview
+  name="scroll-progress"
+  code={`import { useRef } from "react";
+import { ScrollProgress } from "@/components/mpkcn/scroll-progress";
+
+export function LogBox() {
+  const ref = useRef<HTMLDivElement>(null);
+  return (
+    <div className="relative h-[300px] border border-mpk-line">
+      <ScrollProgress target={ref} fixed={false} />
+      <div ref={ref} className="h-full overflow-y-auto p-5">
+        …
+      </div>
+    </div>
+  );
+}`}
+>
+  <ScrollProgressDemo />
+</ComponentPreview>
+
+### Amber, at the bottom
+
+<ComponentPreview name="scroll-progress" code={`<ScrollProgress color="amber" position="bottom" thickness={3} />`}>
+  <ScrollProgressDemo color="amber" position="bottom" thickness={3} />
+</ComponentPreview>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "target", type: "RefObject<HTMLElement | null>", default: "window", description: "Scroll container to track. Leave empty to track the page." },
+    { prop: "fixed", type: "boolean", default: "true", description: "Pin the bar to the viewport. false places it in the nearest positioned parent instead (use with target)." },
+    { prop: "position", type: '"top" | "bottom"', default: '"top"', description: "Edge the bar sits on." },
+    { prop: "color", type: '"blue" | "amber"', default: '"blue"', description: "Accent the bar is drawn in." },
+    { prop: "thickness", type: "number", default: "2", description: "Bar thickness in px." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the bar, e.g. a different z-index (default z-[60])." },
+  ]}
+/>
+
+## Accessibility
+
+- The bar is decorative: `aria-hidden` and `pointer-events: none`. The browser's own scrollbar still carries the position for assistive technology.
+- It follows the scroll position directly, with no easing or animation, so nothing changes under reduced motion.

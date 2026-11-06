@@ -1,0 +1,84 @@
+import { CursorDemo } from "@/components/demos/cursor-demo";
+
+<ComponentPreview name="cursor">
+  <CursorDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="cursor" />
+
+## Usage
+
+Render it once, in your root layout. By default it follows the pointer across the whole window as a fixed layer that never catches clicks.
+
+```tsx
+import { Cursor } from "@/components/mpkcn/cursor";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <Cursor />
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+A small amber block sits on the pointer and a square ring trails behind it. Mark buttons or links with `data-magnetic` and they lean toward the pointer while the ring grows and turns blue.
+
+```tsx
+<button data-magnetic>deploy</button>
+```
+
+## Examples
+
+### Inside a box
+
+Pass `contained` to follow the pointer only inside the nearest positioned parent. Give the parent `position: relative`.
+
+<ComponentPreview
+  name="cursor"
+  code={`<div className="relative h-[300px] overflow-hidden border border-mpk-line">
+  <button data-magnetic>deploy</button>
+  <Cursor contained />
+</div>`}
+>
+  <CursorDemo hideNativeCursor={false} />
+</ComponentPreview>
+
+### Hide the system cursor
+
+`hideNativeCursor` hides the system arrow while the custom cursor is visible. Text fields (inputs, textareas, selects and `contenteditable`) always keep the system I-beam, and the custom cursor steps aside over them.
+
+```tsx
+<Cursor hideNativeCursor />
+```
+
+### No magnets, snappier ring
+
+```tsx
+<Cursor magnetic={false} lag={0.35} />
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "contained", type: "boolean", default: "false", description: "Fill the nearest positioned parent and follow the pointer only inside it, instead of the whole window." },
+    { prop: "magnetic", type: "boolean", default: "true", description: "Pull elements marked data-magnetic toward the pointer and grow the ring over them. Their inline transform is replaced while hovered." },
+    { prop: "hideNativeCursor", type: "boolean", default: "false", description: "Hide the system cursor while the custom one is active. Text fields always keep the system cursor." },
+    { prop: "lag", type: "number", default: "0.16", description: "How fast the ring catches up with the pointer, from 0 (never) to 1 (instantly)." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Run even when the user prefers reduced motion. Only use it behind an explicit action, like a \"play anyway\" button." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the wrapper, e.g. a different z-index (default z-[90])." },
+  ]}
+/>
+
+## Accessibility
+
+- It only runs for a real mouse: on touch screens and coarse pointers (`hover: none`, `pointer: coarse`) it never starts, and pen or touch events are ignored.
+- Under `prefers-reduced-motion: reduce` and on low-power devices (4 cores or fewer, 4 GB memory or less, Save-Data on, or `<html data-perf="low">`) it stays off, unless `ignoreReducedMotion` is set.
+- Over text fields it hides itself and the system I-beam and caret stay. Pressing Tab, or typing in a field, hides it until the mouse moves again, so the focus ring is never covered.
+- It is `aria-hidden`, has `pointer-events: none`, and the ring only animates while it is catching up, so it costs nothing when the mouse is still.

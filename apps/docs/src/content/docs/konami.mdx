@@ -1,0 +1,78 @@
+import { KonamiDemo } from "@/components/demos/konami-demo";
+
+<ComponentPreview name="konami">
+  <KonamiDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="konami" />
+
+## Usage
+
+Drop the component anywhere. Typing ↑ ↑ ↓ ↓ ← → ← → B A on the page plays a few seconds of matrix rain.
+
+```tsx
+import { Konami } from "@/components/mpkcn/konami";
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      {children}
+      <Konami onActivate={() => console.log("cheat unlocked")} />
+    </>
+  );
+}
+```
+
+A click or any key ends the rain early. Keys typed into fields are ignored.
+
+## Examples
+
+### Just the hook
+
+`useKonami` calls your function on a match and returns how many keys are matched so far, so you can show progress or trigger anything else.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import { useKonami } from "@/components/mpkcn/konami";
+
+export function Secret() {
+  const [unlocked, setUnlocked] = useState(false);
+  const matched = useKonami(() => setUnlocked(true));
+  return <p>{unlocked ? "+30 lives" : `${matched}/10`}</p>;
+}
+```
+
+### Your own sequence
+
+`sequence` takes `KeyboardEvent.key` values, letters in lower case.
+
+```tsx
+<Konami sequence={["m", "p", "k"]} rain={false} onActivate={() => setTheme("light")} />
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "onActivate", type: "() => void", default: "—", description: "Called each time the code is entered." },
+    { prop: "sequence", type: "string[]", default: "KONAMI_CODE", description: "Keys to match, as KeyboardEvent.key values." },
+    { prop: "enabled", type: "boolean", default: "true", description: "Listen at all." },
+    { prop: "rain", type: "boolean", default: "true", description: "Play matrix rain on a match." },
+    { prop: "duration", type: "number", default: "6000", description: "How long the rain lasts, in milliseconds." },
+    { prop: "fullscreen", type: "boolean", default: "true", description: "Rain over the viewport. false fills the nearest positioned parent." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Rain even under reduced motion. Only use it behind an explicit action." },
+    { prop: "onProgress", type: "(matched: number) => void", default: "—", description: "Number of keys matched so far." },
+  ]}
+/>
+
+`useKonami(onMatch, { sequence?, enabled?, ignoreInputs? })` returns the matched count. `KONAMI_CODE` is exported too.
+
+## Accessibility
+
+- Under `prefers-reduced-motion: reduce` there is no rain, but `onActivate` still fires.
+- The rain is decorative: `aria-hidden`, never focusable, and gone after `duration` or on the first click or key.
+- Keys typed into inputs, textareas, selects and editable content never count, so the code cannot fire while someone types.

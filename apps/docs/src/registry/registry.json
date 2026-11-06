@@ -5,33 +5,388 @@
     "description": "The mpkcn design tokens: dark and light palettes, mono and sans fonts, and the blink animation as Tailwind 4 theme variables.",
     "dependencies": [],
     "registryDependencies": [],
-    "files": [{ "path": "mpkcn-theme.css", "target": "mpkcn-theme.css" }]
+    "files": [
+      {
+        "path": "mpkcn-theme.css",
+        "target": "mpkcn-theme.css"
+      }
+    ]
   },
   {
     "name": "boot-screen",
     "title": "Boot Screen",
     "description": "A tuigreet-style login screen with a typed username, password dots and optional matrix rain that plays before your page appears.",
     "dependencies": [],
-    "registryDependencies": ["theme"],
+    "registryDependencies": [
+      "theme"
+    ],
     "files": [
-      { "path": "boot-screen.tsx", "target": "boot-screen.tsx" },
-      { "path": "lib/matrix-rain.ts", "target": "lib/matrix-rain.ts" }
+      {
+        "path": "boot-screen.tsx",
+        "target": "boot-screen.tsx"
+      },
+      {
+        "path": "lib/matrix-rain.ts",
+        "target": "lib/matrix-rain.ts"
+      }
     ]
   },
   {
     "name": "theme-toggle",
     "title": "Theme Toggle",
     "description": "A dark and light switch for next-themes, as a round icon button or a mono text flag, with no hydration flash.",
-    "dependencies": ["next-themes"],
-    "registryDependencies": ["theme"],
-    "files": [{ "path": "theme-toggle.tsx", "target": "theme-toggle.tsx" }]
+    "dependencies": [
+      "next-themes"
+    ],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "theme-toggle.tsx",
+        "target": "theme-toggle.tsx"
+      }
+    ]
   },
   {
     "name": "reveal",
     "title": "Reveal",
     "description": "Fades and slides content in as it scrolls into view, and keeps still under reduced motion.",
-    "dependencies": ["framer-motion"],
-    "registryDependencies": ["theme"],
-    "files": [{ "path": "reveal.tsx", "target": "reveal.tsx" }]
+    "dependencies": [
+      "framer-motion"
+    ],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "reveal.tsx",
+        "target": "reveal.tsx"
+      }
+    ]
+  },
+  {
+    "name": "ascii-image",
+    "title": "ASCII Image",
+    "description": "An image that starts as a wall of flickering code glyphs and decodes into the real picture in a left-to-right sweep.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "ascii-image.tsx",
+        "target": "ascii-image.tsx"
+      }
+    ]
+  },
+  {
+    "name": "back-to-top",
+    "title": "Back to Top",
+    "description": "A small square button that appears after the first screen and scrolls back up, with a reduced-motion jump and optional focus target.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "back-to-top.tsx",
+        "target": "back-to-top.tsx"
+      }
+    ]
+  },
+  {
+    "name": "command-palette",
+    "title": "Command Palette",
+    "description": "A terminal-style Ctrl+K command palette with groups, fuzzy word filtering and full keyboard control, as a dialog or inline.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "command-palette.tsx",
+        "target": "command-palette.tsx"
+      }
+    ]
+  },
+  {
+    "name": "cursor",
+    "title": "Cursor",
+    "description": "A terminal-style pointer follower, a block caret with a trailing square ring and magnetic buttons, that steps aside for touch, text fields, the keyboard and reduced motion.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "cursor.tsx",
+        "target": "cursor.tsx"
+      }
+    ]
+  },
+  {
+    "name": "eyebrow",
+    "title": "Eyebrow",
+    "description": "A small mono label for above a heading that types itself out, with a block cursor, as it scrolls into view.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "eyebrow.tsx",
+        "target": "eyebrow.tsx"
+      }
+    ]
+  },
+  {
+    "name": "feature-list",
+    "title": "Feature List",
+    "description": "A spec-sheet list of label and value rows between hairlines, sliding in one by one.",
+    "dependencies": [
+      "framer-motion"
+    ],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "feature-list.tsx",
+        "target": "feature-list.tsx"
+      }
+    ]
+  },
+  {
+    "name": "grain",
+    "title": "Grain",
+    "description": "A static film-grain overlay in two blend layers that stays visible on both the dark and the light theme, at no per-frame cost.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "grain.tsx",
+        "target": "grain.tsx"
+      }
+    ]
+  },
+  {
+    "name": "image-placeholder",
+    "title": "Image Placeholder",
+    "description": "A framed image slot that shows a striped placeholder with a mono label until the image exists or when it fails to load.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "image-placeholder.tsx",
+        "target": "image-placeholder.tsx"
+      }
+    ]
+  },
+  {
+    "name": "kbd",
+    "title": "Kbd",
+    "description": "A keyboard key badge with a thick bottom edge, for single keys or combos like Ctrl + K.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "kbd.tsx",
+        "target": "kbd.tsx"
+      }
+    ]
+  },
+  {
+    "name": "konami",
+    "title": "Konami",
+    "description": "A useKonami hook and an easter-egg component that fires a callback and plays matrix rain when someone types the Konami code.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "konami.tsx",
+        "target": "konami.tsx"
+      },
+      {
+        "path": "lib/matrix-rain.ts",
+        "target": "lib/matrix-rain.ts"
+      }
+    ]
+  },
+  {
+    "name": "letter-reveal",
+    "title": "Letter Reveal",
+    "description": "Splits a heading into letters that spring up and flip into place one after another.",
+    "dependencies": [
+      "framer-motion"
+    ],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "letter-reveal.tsx",
+        "target": "letter-reveal.tsx"
+      }
+    ]
+  },
+  {
+    "name": "scene-canvas",
+    "title": "Scene Canvas",
+    "description": "A slow wave rippling through a grid of dots on a canvas, capped at 30fps and paused off screen, in hidden tabs, on weak devices and under reduced motion.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "scene-canvas.tsx",
+        "target": "scene-canvas.tsx"
+      }
+    ]
+  },
+  {
+    "name": "scroll-progress",
+    "title": "Scroll Progress",
+    "description": "A thin accent bar that fills as the page or a scroll container is scrolled.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "scroll-progress.tsx",
+        "target": "scroll-progress.tsx"
+      }
+    ]
+  },
+  {
+    "name": "section-divider",
+    "title": "Section Divider",
+    "description": "A terminal-style break between sections: hairlines grow out and a linked label types \"EOF about $ cd ../work\".",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "section-divider.tsx",
+        "target": "section-divider.tsx"
+      }
+    ]
+  },
+  {
+    "name": "section-rail",
+    "title": "Section Rail",
+    "description": "A slim side rail of numbered dots that tracks the section in view and jumps to a section on click.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "section-rail.tsx",
+        "target": "section-rail.tsx"
+      }
+    ]
+  },
+  {
+    "name": "shortcuts-dialog",
+    "title": "Shortcuts Dialog",
+    "description": "A keyboard-shortcut cheat sheet in a terminal-style dialog that opens with \"?\".",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "shortcuts-dialog.tsx",
+        "target": "shortcuts-dialog.tsx"
+      }
+    ]
+  },
+  {
+    "name": "spotlight",
+    "title": "Spotlight",
+    "description": "A panel with a soft accent glow that follows the pointer while it hovers, drawn in CSS without re-rendering.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "spotlight.tsx",
+        "target": "spotlight.tsx"
+      }
+    ]
+  },
+  {
+    "name": "terminal-form",
+    "title": "Terminal Form",
+    "description": "A form that runs like a terminal prompt: one question at a time, editable answers, then a confirm step that hands the values to your callback.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "terminal-form.tsx",
+        "target": "terminal-form.tsx"
+      }
+    ]
+  },
+  {
+    "name": "terminal-shell",
+    "title": "Terminal Shell",
+    "description": "An interactive fake shell: you pass the commands, it handles the prompt, history, tab completion, help, clear and Ctrl+L.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme",
+      "terminal-window"
+    ],
+    "files": [
+      {
+        "path": "terminal-shell.tsx",
+        "target": "terminal-shell.tsx"
+      }
+    ]
+  },
+  {
+    "name": "terminal-window",
+    "title": "Terminal Window",
+    "description": "A terminal window with title bar and dots that types out commands and their output line by line, then shows your content.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "terminal-window.tsx",
+        "target": "terminal-window.tsx"
+      }
+    ]
+  },
+  {
+    "name": "tmux-bar",
+    "title": "Tmux Bar",
+    "description": "A tmux-style status bar with a session block, clickable windows, custom segments, a clock, uptime and scroll position.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "tmux-bar.tsx",
+        "target": "tmux-bar.tsx"
+      }
+    ]
   }
 ]

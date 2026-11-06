@@ -1,6 +1,6 @@
 ## What is mpkcn?
 
-mpkcn is a small set of React components with a terminal feel: a login-style **boot screen**, a **theme toggle** and a scroll **reveal**. They come from the portfolio of MpK and are now packaged so anyone can use them.
+mpkcn is a set of 24 React components with a terminal feel: a login-style **boot screen**, **terminal windows and shells**, a **command palette**, a **tmux status bar**, and quiet effects like **grain**, **spotlight** and scroll **reveals**. Browse them all, running live, in the [gallery](/components/). They come from the portfolio of MpK and are now packaged so anyone can use them.
 
 It is not a library you install from npm. Like [shadcn/ui](https://ui.shadcn.com), you run one command and the component's source is copied into your project:
 
@@ -22,9 +22,30 @@ From then on the code is yours. Read it, change the timings, rename the props, d
 
 | Component | What it does | Extra npm deps |
 | --- | --- | --- |
-| [Boot Screen](/docs/components/boot-screen/) | tuigreet-style login intro with optional matrix rain | none |
-| [Theme Toggle](/docs/components/theme-toggle/) | Dark / light switch as an icon or a `--flag` | `next-themes` |
-| [Reveal](/docs/components/reveal/) | Fade and slide in on scroll | `framer-motion` |
+| [ASCII Image](/docs/components/ascii-image/) | An image that starts as a wall of flickering code glyphs and decodes into the real picture in a left-to-right sweep. | none |
+| [Back to Top](/docs/components/back-to-top/) | A small square button that appears after the first screen and scrolls back up, with a reduced-motion jump and optional focus target. | none |
+| [Boot Screen](/docs/components/boot-screen/) | A tuigreet-style login screen with a typed username, password dots and optional matrix rain that plays before your page appears. | none |
+| [Command Palette](/docs/components/command-palette/) | A terminal-style Ctrl+K command palette with groups, fuzzy word filtering and full keyboard control, as a dialog or inline. | none |
+| [Cursor](/docs/components/cursor/) | A terminal-style pointer follower, a block caret with a trailing square ring and magnetic buttons, that steps aside for touch, text fields, the keyboard and reduced motion. | none |
+| [Eyebrow](/docs/components/eyebrow/) | A small mono label for above a heading that types itself out, with a block cursor, as it scrolls into view. | none |
+| [Feature List](/docs/components/feature-list/) | A spec-sheet list of label and value rows between hairlines, sliding in one by one. | `framer-motion` |
+| [Grain](/docs/components/grain/) | A static film-grain overlay in two blend layers that stays visible on both the dark and the light theme, at no per-frame cost. | none |
+| [Image Placeholder](/docs/components/image-placeholder/) | A framed image slot that shows a striped placeholder with a mono label until the image exists or when it fails to load. | none |
+| [Kbd](/docs/components/kbd/) | A keyboard key badge with a thick bottom edge, for single keys or combos like Ctrl + K. | none |
+| [Konami](/docs/components/konami/) | A useKonami hook and an easter-egg component that fires a callback and plays matrix rain when someone types the Konami code. | none |
+| [Letter Reveal](/docs/components/letter-reveal/) | Splits a heading into letters that spring up and flip into place one after another. | `framer-motion` |
+| [Reveal](/docs/components/reveal/) | Fades and slides content in as it scrolls into view, and keeps still under reduced motion. | `framer-motion` |
+| [Scene Canvas](/docs/components/scene-canvas/) | A slow wave rippling through a grid of dots on a canvas, capped at 30fps and paused off screen, in hidden tabs, on weak devices and under reduced motion. | none |
+| [Scroll Progress](/docs/components/scroll-progress/) | A thin accent bar that fills as the page or a scroll container is scrolled. | none |
+| [Section Divider](/docs/components/section-divider/) | A terminal-style break between sections: hairlines grow out and a linked label types "EOF about $ cd ../work". | none |
+| [Section Rail](/docs/components/section-rail/) | A slim side rail of numbered dots that tracks the section in view and jumps to a section on click. | none |
+| [Shortcuts Dialog](/docs/components/shortcuts-dialog/) | A keyboard-shortcut cheat sheet in a terminal-style dialog that opens with "?". | none |
+| [Spotlight](/docs/components/spotlight/) | A panel with a soft accent glow that follows the pointer while it hovers, drawn in CSS without re-rendering. | none |
+| [Terminal Form](/docs/components/terminal-form/) | A form that runs like a terminal prompt: one question at a time, editable answers, then a confirm step that hands the values to your callback. | none |
+| [Terminal Shell](/docs/components/terminal-shell/) | An interactive fake shell: you pass the commands, it handles the prompt, history, tab completion, help, clear and Ctrl+L. | none |
+| [Terminal Window](/docs/components/terminal-window/) | A terminal window with title bar and dots that types out commands and their output line by line, then shows your content. | none |
+| [Theme Toggle](/docs/components/theme-toggle/) | A dark and light switch for next-themes, as a round icon button or a mono text flag, with no hydration flash. | `next-themes` |
+| [Tmux Bar](/docs/components/tmux-bar/) | A tmux-style status bar with a session block, clickable windows, custom segments, a clock, uptime and scroll position. | none |
 
 ## Next steps
 

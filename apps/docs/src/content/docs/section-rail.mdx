@@ -1,0 +1,94 @@
+<ComponentPreview name="section-rail" />
+
+## Installation
+
+<InstallTabs name="section-rail" />
+
+## Usage
+
+Render it once on a long page and list your section ids in order:
+
+```tsx
+import { SectionRail } from "@/components/mpkcn/section-rail";
+
+export default function Page() {
+  return (
+    <>
+      <SectionRail sections={["hero", "work", "about", "stack", "contact"]} className="hidden lg:flex" />
+      <section id="hero">…</section>
+      <section id="work">…</section>
+      {/* … */}
+    </>
+  );
+}
+```
+
+By default the rail is fixed to the middle of the right edge. A section becomes active once its top passes 40% of the viewport height; the active row shows its number and a filled blue dot. Clicking a row smooth-scrolls to its section.
+
+## Examples
+
+### Labels
+
+Pass objects to give each link a readable name (the id is used otherwise):
+
+```tsx
+<SectionRail
+  sections={[
+    { id: "hero", label: "Top" },
+    { id: "work", label: "Selected work" },
+    { id: "contact", label: "Contact" },
+  ]}
+/>
+```
+
+### Inside a scroll container
+
+Pass the container as `root`, and `fixed={false}` to place the rail yourself. This is how the preview above works.
+
+```tsx
+"use client";
+
+import { useRef } from "react";
+import { SectionRail } from "@/components/mpkcn/section-rail";
+
+export function Panel() {
+  const box = useRef<HTMLDivElement>(null);
+  return (
+    <div className="relative h-80">
+      <div ref={box} className="h-full overflow-y-auto">
+        <section id="a">…</section>
+        <section id="b">…</section>
+      </div>
+      <SectionRail sections={["a", "b"]} root={box} fixed={false} className="absolute top-1/2 right-3 -translate-y-1/2" />
+    </div>
+  );
+}
+```
+
+### React to the active section
+
+```tsx
+<SectionRail sections={ids} onActiveChange={(id) => setTitle(id)} />
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "sections", type: "(string | { id: string; label?: string })[]", default: "—", description: "Sections in page order. Plain strings are used as ids." },
+    { prop: "offset", type: "number", default: "0.4", description: "A section becomes active once its top passes this fraction of the viewport (or container) height." },
+    { prop: "root", type: "RefObject<HTMLElement | null>", default: "—", description: "Scroll container that holds the sections. Omit to track the window." },
+    { prop: "fixed", type: "boolean", default: "true", description: "Pin the rail to the middle of the viewport edge. false leaves it in the normal flow." },
+    { prop: "side", type: '"left" | "right"', default: '"right"', description: "Which edge the rail sits on when fixed. Also flips the number/dot order." },
+    { prop: "ariaLabel", type: "string", default: '"Sections"', description: "Accessible name of the nav landmark." },
+    { prop: "onActiveChange", type: "(id: string) => void", default: "—", description: "Called with the id of the newly active section." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the nav. Add e.g. \"hidden lg:flex\" to hide it on small screens." },
+  ]}
+/>
+
+## Accessibility
+
+- A `nav` landmark (named "Sections" by default) of real links to `#id`, so it works without JavaScript and with the keyboard. Each link has a visible focus ring, and focusing it shows its number.
+- Each link is named by its `label` (or id). The active one carries `aria-current="location"`.
+- Under `prefers-reduced-motion: reduce` clicks jump instead of smooth-scrolling, and the dot and number transitions are off.
+- It renders the first section as active on the server and measures after mount, so there is no hydration mismatch.

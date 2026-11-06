@@ -1,0 +1,103 @@
+import { TerminalShellDemo } from "@/components/demos/terminal-shell-demo";
+
+<ComponentPreview name="terminal-shell">
+  <TerminalShellDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="terminal-shell" />
+
+It installs [Terminal Window](/docs/components/terminal-window/) too, which draws the frame.
+
+## Usage
+
+Give it your commands. Each one gets the words typed after its name and returns what to print: a string, a React node, or an array of lines.
+
+```tsx
+"use client";
+
+import { TerminalShell } from "@/components/mpkcn/terminal-shell";
+
+export function Shell() {
+  return (
+    <TerminalShell
+      title="guest@site: ~"
+      commands={{
+        whoami: { description: "who you are", run: () => "guest" },
+        echo: { description: "print text", usage: "echo <text>", run: (args) => args.join(" ") },
+        about: () => ["A terminal-style site.", "Type help for more."],
+      }}
+    />
+  );
+}
+```
+
+`help`, `clear` and `history` are built in (turn them off with `builtins={false}`). The prompt handles ↑ ↓ history, Tab completion of command names, Ctrl+L to clear and Ctrl+C to drop the line.
+
+## Examples
+
+### Async commands
+
+`run` can return a promise. The input waits until it settles; use `ctx.print` to show progress first. A thrown error is printed as `name: message`.
+
+```tsx
+<TerminalShell
+  commands={{
+    weather: {
+      description: "today's weather",
+      run: async ([city = "Tunis"], ctx) => {
+        ctx.print(`fetching ${city}…`);
+        const res = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
+        return (await res.json()).summary;
+      },
+    },
+  }}
+/>
+```
+
+### Hidden commands
+
+`hidden: true` keeps a command out of `help` and Tab completion: room for easter eggs.
+
+```tsx
+commands={{ sudo: { hidden: true, run: () => "nice try." } }}
+```
+
+### In a popup
+
+The shell renders inline. To open it over the page, put it in your dialog and pass `onClose`: the title bar gets an "esc" button and Esc in the input calls it too.
+
+```tsx
+<TerminalShell autoFocus onClose={() => setOpen(false)} commands={commands} />
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "commands", type: "Record<string, ShellCommand | ShellCommand[\"run\"]>", default: "{}", description: "Your commands by name: { description?, usage?, hidden?, run(args, ctx) }, or just the run function." },
+    { prop: "builtins", type: "boolean", default: "true", description: "Add help, clear and history. Yours win on a name clash." },
+    { prop: "welcome", type: "ReactNode[]", default: '[\'Type "help" to list commands.\']', description: "Lines printed when the shell starts." },
+    { prop: "prompt", type: "string", default: '"$"', description: "Prompt in front of the input and past commands." },
+    { prop: "title", type: "ReactNode", default: '"~ — sh"', description: "Text in the title bar." },
+    { prop: "notFound", type: "(name: string) => ShellOutput", default: "command not found", description: "Output for an unknown command." },
+    { prop: "inputLabel", type: "string", default: '"Terminal input"', description: "Accessible name of the input." },
+    { prop: "placeholder", type: "string", default: "—", description: "Placeholder in the empty input." },
+    { prop: "autoFocus", type: "boolean", default: "false", description: "Focus the input on mount." },
+    { prop: "hints", type: "boolean", default: "true", description: "Show the key-hint footer." },
+    { prop: "maxLines", type: "number", default: "300", description: "Most lines kept on screen." },
+    { prop: "onClose", type: "() => void", default: "—", description: "Adds an \"esc\" button; Esc in the input calls it." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the window." },
+    { prop: "screenClassName", type: "string", default: '"h-72"', description: "Extra classes for the scrolling screen; set its height here." },
+  ]}
+/>
+
+`run` receives `ctx: { history: string[]; clear(): void; print(output): void }`.
+
+## Accessibility
+
+- The input has a real label ("Terminal input" by default) and the window shows a focus border when it is focused.
+- Output lands in a `role="log"` region, so screen readers announce new lines as they print.
+- Tab only completes when there is a partial command name; on an empty input it moves focus as usual, so keyboard users are never trapped.
+- Clicking the screen focuses the input, unless you are selecting text to copy.

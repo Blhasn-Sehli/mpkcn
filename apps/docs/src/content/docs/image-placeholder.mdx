@@ -1,0 +1,59 @@
+import { ImagePlaceholder } from "@/registry/image-placeholder";
+
+<ComponentPreview name="image-placeholder" />
+
+## Installation
+
+<InstallTabs name="image-placeholder" />
+
+## Usage
+
+```tsx
+import { ImagePlaceholder } from "@/components/mpkcn/image-placeholder";
+
+export function ProjectCard() {
+  return <ImagePlaceholder src="/images/dashboard.png" alt="Dashboard, dark theme" className="w-full" />;
+}
+```
+
+While `src` is empty, or if the file fails to load, the box shows faint diagonal stripes and a mono label in the corner. Once the image loads it fills the frame (`object-fit: cover`). So you can lay out a page before the screenshots exist, then drop the files in.
+
+## Examples
+
+### Wide, with a custom label
+
+<ComponentPreview name="image-placeholder" code={`<ImagePlaceholder alt="Demo video" aspectRatio="16 / 10" label="demo.mp4 — recording soon" />`}>
+  <div className="w-full max-w-md">
+    <ImagePlaceholder alt="Demo video" aspectRatio="16 / 10" label="demo.mp4 — recording soon" />
+  </div>
+</ComponentPreview>
+
+### Size it yourself
+
+`aspectRatio={null}` drops the built-in ratio so your classes decide the size.
+
+```tsx
+<ImagePlaceholder alt="Avatar" aspectRatio={null} className="size-24" label="" />
+```
+
+### With next/image
+
+The component uses a plain `<img>` so it works in any React app. In Next.js you can swap that tag for `next/image` with `fill` in your copy of the file.
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "src", type: "string", default: "—", description: "Image URL. When it is missing or fails to load, the striped placeholder shows instead." },
+    { prop: "alt", type: "string", default: "—", description: "Alt text for the image. Also the accessible name of the placeholder." },
+    { prop: "label", type: "string", default: '"image coming soon"', description: "Text shown in the placeholder's bottom-left corner." },
+    { prop: "aspectRatio", type: "string | null", default: '"4 / 5"', description: "CSS aspect-ratio of the box, e.g. \"16 / 10\". null lets your className set the size." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the box (width, height, margins)." },
+  ]}
+/>
+
+## Accessibility
+
+- With an image, the `<img>` carries your `alt` text as usual.
+- Without one, the box is `role="img"` named by the same `alt`, so screen readers still know what belongs there. The stripes and the corner label are `aria-hidden`.
+- A load error that happens before hydration is caught too, so a broken URL never shows the browser's broken-image icon for long.

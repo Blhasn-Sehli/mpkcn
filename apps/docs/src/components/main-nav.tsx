@@ -5,7 +5,11 @@ import { usePathname } from "next/navigation";
 
 const items = [
   { label: "Docs", href: "/docs/", match: (p: string) => p.startsWith("/docs") && !p.startsWith("/docs/components") },
-  { label: "Components", href: "/docs/components/boot-screen/", match: (p: string) => p.startsWith("/docs/components") },
+  {
+    label: "Components",
+    href: "/components/",
+    match: (p: string) => p.startsWith("/components") || p.startsWith("/docs/components"),
+  },
 ];
 
 export function MainNav() {

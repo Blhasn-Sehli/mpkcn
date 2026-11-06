@@ -1,0 +1,95 @@
+import { CommandPaletteDemo } from "@/components/demos/command-palette-demo";
+
+<ComponentPreview name="command-palette">
+  <CommandPaletteDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="command-palette" />
+
+## Usage
+
+Render it once, anywhere (a layout is a good place), and give it items. Ctrl+K (Cmd+K on macOS) opens it.
+
+```tsx
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import { CommandPalette } from "@/components/mpkcn/command-palette";
+
+export function Palette() {
+  const router = useRouter();
+  const { setTheme } = useTheme();
+  return (
+    <CommandPalette
+      items={[
+        { label: "cd ~/docs", group: "navigate", hint: "page", onSelect: () => router.push("/docs") },
+        { label: "open github", group: "links", keywords: ["source"], onSelect: () => window.open("https://github.com/you") },
+        { label: "theme dark", group: "actions", onSelect: () => setTheme("dark") },
+        { label: "theme light", group: "actions", onSelect: () => setTheme("light") },
+      ]}
+    />
+  );
+}
+```
+
+Type to filter: every word of the query must appear in the label, group or `keywords`. ↑ ↓ move (and wrap), Home and End jump, Enter runs, Esc or a click outside closes. Items are listed under their `group`, in the order groups first appear.
+
+## Examples
+
+### Open it from a button
+
+Control it with `open` and `onOpenChange`. The hotkey keeps working alongside.
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<button onClick={() => setOpen(true)}>search</button>
+<CommandPalette items={items} open={open} onOpenChange={setOpen} />
+```
+
+### Inline
+
+`modal={false}` renders the panel in place, always visible, with no backdrop. The hotkey then focuses its input.
+
+```tsx
+<CommandPalette items={items} modal={false} hotkey={false} />
+```
+
+### Another shortcut
+
+`hotkey` is the key pressed with Ctrl or Cmd. Pass `false` if your site already uses Ctrl+K (this page does, so the previews above turn it off).
+
+```tsx
+<CommandPalette items={items} hotkey="p" />
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "items", type: "CommandItem[]", default: "—", description: "{ label, onSelect, id?, group?, hint?, shortcut?, keywords?, disabled? }." },
+    { prop: "open", type: "boolean", default: "—", description: "Controlled open state." },
+    { prop: "defaultOpen", type: "boolean", default: "false", description: "Initial open state when uncontrolled." },
+    { prop: "onOpenChange", type: "(open: boolean) => void", default: "—", description: "Called when it wants to open or close." },
+    { prop: "hotkey", type: "string | false", default: '"k"', description: "Key pressed with Ctrl/Cmd to toggle it (focuses the input when inline)." },
+    { prop: "modal", type: "boolean", default: "true", description: "Centered dialog over the page. false renders the panel inline." },
+    { prop: "placeholder", type: "string", default: '"type a command…"', description: "Placeholder of the search input." },
+    { prop: "emptyText", type: "ReactNode", default: '"no match"', description: "Shown when nothing matches." },
+    { prop: "prompt", type: "string", default: '"$"', description: "Prompt in front of the input." },
+    { prop: "label", type: "string", default: '"Command palette"', description: "Accessible name of the dialog and list." },
+    { prop: "footer", type: "ReactNode | false", default: '"↑↓ select · ⏎ run · esc close"', description: "Key-hint footer; false hides it." },
+    { prop: "closeOnSelect", type: "boolean", default: "true", description: "Close the dialog after an item runs." },
+    { prop: "filter", type: "(item, query) => boolean", default: "word match", description: "Custom matcher." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the panel." },
+  ]}
+/>
+
+## Accessibility
+
+- Built on the ARIA combobox pattern: the input is a `combobox` that controls a `listbox` of `option`s, and `aria-activedescendant` follows the highlighted one, so focus never leaves the input.
+- Groups are `role="group"` with their heading as the label. Disabled items are `aria-disabled` and skipped by the arrow keys.
+- As a dialog it is `role="dialog"` with `aria-modal`, rendered in a portal. Focus moves to the input, Tab cannot leave, page scroll is locked, and focus goes back to where it was when it closes.
+- The picked command runs right after the dialog closes, so a command that moves focus or navigates is not undone by the focus return.

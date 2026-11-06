@@ -1,0 +1,70 @@
+import { GrainDemo } from "@/components/demos/grain-demo";
+
+<ComponentPreview name="grain">
+  <GrainDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="grain" />
+
+## Usage
+
+Render it once, in your root layout. It covers the whole viewport as a fixed layer above the page and never catches clicks. It has no state, so it also works in a Server Component.
+
+```tsx
+import { Grain } from "@/components/mpkcn/grain";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        {children}
+        <Grain />
+      </body>
+    </html>
+  );
+}
+```
+
+The noise is two layers of the same SVG tile: a `screen` layer that lifts dark pixels and a `multiply` layer that darkens light ones. A single `overlay` layer almost disappears on a near-black background; the pair stays visible on both themes. The tile is a background image, so it is drawn once and costs nothing per frame.
+
+## Examples
+
+### Inside a box
+
+Pass `contained` to fill the nearest positioned parent instead of the viewport. Add `isolate` to the parent to blend only with what is inside it.
+
+<ComponentPreview
+  name="grain"
+  code={`<div className="relative isolate h-[300px] overflow-hidden border border-mpk-line bg-mpk-bg">
+  <h2>A little texture on flat colors.</h2>
+  <Grain contained intensity={2} />
+</div>`}
+>
+  <GrainDemo />
+</ComponentPreview>
+
+### Stronger and coarser
+
+```tsx
+<Grain intensity={2.5} size={220} />
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "contained", type: "boolean", default: "false", description: "Fill the nearest positioned parent instead of covering the whole viewport as a fixed overlay." },
+    { prop: "intensity", type: "number", default: "1", description: "Strength multiplier: 1 is the subtle default, 2 doubles it, 0 hides it." },
+    { prop: "size", type: "number", default: "160", description: "Size of the repeating noise tile in px. Smaller is finer grain." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for both noise layers, e.g. a different z-index (default z-[100])." },
+  ]}
+/>
+
+## Accessibility
+
+- Both layers are `aria-hidden` and `pointer-events: none`: nothing to read, nothing to click through.
+- The grain is static, so there is nothing to turn off for reduced motion.
+- The default strength (4% and 2% on dark, 2% and 5% on light) is a texture, not a filter: text contrast stays the same. Keep `intensity` low over body text.
+- It is hidden when printing.

@@ -1,0 +1,76 @@
+import { ShortcutsDialogDemo } from "@/components/demos/shortcuts-dialog-demo";
+
+<ComponentPreview name="shortcuts-dialog">
+  <ShortcutsDialogDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="shortcuts-dialog" />
+
+## Usage
+
+Render it once and list your shortcuts. Pressing `?` anywhere (outside a text field) toggles it.
+
+```tsx
+import { ShortcutsDialog } from "@/components/mpkcn/shortcuts-dialog";
+
+export function Help() {
+  return (
+    <ShortcutsDialog
+      shortcuts={[
+        { keys: ["j", "k"], description: "next / previous section", group: "navigate" },
+        { keys: "g", description: "back to top", group: "navigate" },
+        { keys: ["Ctrl", "K"], description: "command palette", group: "general" },
+        { keys: "?", description: "this help", group: "general" },
+      ]}
+    />
+  );
+}
+```
+
+`keys` is one string (one badge) or an array (one badge per key). Items with a `group` are listed under it, in the order groups first appear.
+
+## Examples
+
+### Open it from a button
+
+Control it with `open` and `onOpenChange`; the `?` key keeps working alongside.
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<button onClick={() => setOpen(true)}>shortcuts</button>
+<ShortcutsDialog shortcuts={shortcuts} open={open} onOpenChange={setOpen} />
+```
+
+### Custom title and footer
+
+`title` is the command in the header (and the dialog's accessible name).
+
+```tsx
+<ShortcutsDialog title="man my-app" footer="tip: shortcuts work on every page" shortcuts={shortcuts} />
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "shortcuts", type: "{ keys: string | string[]; description: ReactNode; group?: string }[]", default: '"?" and "Esc"', description: "The shortcuts to list." },
+    { prop: "title", type: "string", default: '"man shortcuts"', description: "Command in the header; also the accessible name." },
+    { prop: "open", type: "boolean", default: "—", description: "Controlled open state." },
+    { prop: "defaultOpen", type: "boolean", default: "false", description: "Initial open state when uncontrolled." },
+    { prop: "onOpenChange", type: "(open: boolean) => void", default: "—", description: "Called when it wants to open or close." },
+    { prop: "hotkey", type: "string | false", default: '"?"', description: "Key that toggles it, ignored while typing in a field. false turns it off." },
+    { prop: "footer", type: "ReactNode | false", default: '"press esc to close"', description: "Text under the list; false hides it." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the panel." },
+  ]}
+/>
+
+## Accessibility
+
+- A `role="dialog"` with `aria-modal`, labelled by its header, rendered in a portal.
+- Focus moves to the close button when it opens, Tab and Shift+Tab stay inside, and focus returns to where it was when it closes.
+- Esc, the close button and a click on the backdrop all close it. Page scroll is locked while it is open.
+- The `?` key is ignored while typing in an input, textarea, select or editable element, and when Ctrl, Cmd or Alt is held.
+- Shortcuts are a description list (`dl`), with each key in a `kbd`.

@@ -1,0 +1,87 @@
+import { FeatureList } from "@/registry/feature-list";
+
+<ComponentPreview name="feature-list" />
+
+## Installation
+
+<InstallTabs name="feature-list" />
+
+## Usage
+
+```tsx
+import { FeatureList } from "@/components/mpkcn/feature-list";
+
+export function ProjectFacts() {
+  return (
+    <FeatureList
+      items={[
+        { label: "Role", value: "Solo dev" },
+        { label: "Stack", value: "Next.js · Postgres" },
+        { label: "Year", value: "2026" },
+      ]}
+    />
+  );
+}
+```
+
+Each row is a label on the left (bright) and a value on the right (dimmed), between hairlines. When a third of the list is in view, the rows slide in from the left one by one, 80ms apart.
+
+## Examples
+
+### Without animation
+
+<ComponentPreview
+  name="feature-list"
+  code={`<FeatureList
+  animate={false}
+  items={[
+    { label: "Format", value: "copy-paste source" },
+    { label: "Deps", value: "framer-motion" },
+    { label: "License", value: "MIT" },
+  ]}
+/>`}
+>
+  <div className="w-full max-w-md">
+    <FeatureList
+      animate={false}
+      className="text-sm"
+      items={[
+        { label: "Format", value: "copy-paste source" },
+        { label: "Deps", value: "framer-motion" },
+        { label: "License", value: "MIT" },
+      ]}
+    />
+  </div>
+</ComponentPreview>
+
+### Rich values
+
+`label` and `value` take any React node, such as links or badges.
+
+```tsx
+<FeatureList
+  items={[
+    { label: "Repo", value: <a href="https://github.com/you/app">github.com/you/app</a> },
+    { label: "Status", value: <span className="text-mpk-amber">beta</span> },
+  ]}
+/>
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "items", type: "{ label: React.ReactNode; value: React.ReactNode }[]", default: "—", description: "Rows to show, top to bottom." },
+    { prop: "animate", type: "boolean", default: "true", description: "Slide the rows in one after another when the list scrolls into view." },
+    { prop: "stagger", type: "number", default: "0.08", description: "Seconds between rows." },
+    { prop: "once", type: "boolean", default: "true", description: "Animate only the first time it scrolls into view." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Animate even when the user prefers reduced motion. Only use it behind an explicit action, like a \"play anyway\" button." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the list." },
+  ]}
+/>
+
+## Accessibility
+
+- Rendered as a description list: each row is a `div` holding a `dt` (label) and a `dd` (value), so screen readers announce the pairs together.
+- Under `prefers-reduced-motion: reduce` the rows don't slide, they only fade in.
+- Server and client render the same markup, so there is no hydration mismatch.

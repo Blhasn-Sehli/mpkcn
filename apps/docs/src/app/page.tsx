@@ -141,7 +141,7 @@ export default function Home() {
                 Terminal-style components you <span className="text-mpk-amber">copy</span>, paste and own.
               </h1>
               <p className="mt-6 max-w-xl text-base leading-7 text-mpk-dim sm:text-lg sm:leading-8">
-                A boot screen, a theme toggle and scroll reveals for React and Tailwind 4. Square corners, hairline
+                24 components for React and Tailwind 4: boot screens, terminal windows, a command palette, tmux bars and quiet effects. Square corners, hairline
                 borders, amber and blue. Copied into your project with one command.
               </p>
 
@@ -162,10 +162,10 @@ export default function Home() {
                   Get started <ArrowRightIcon width={14} height={14} />
                 </Link>
                 <Link
-                  href="/docs/components/boot-screen/"
+                  href="/components/"
                   className="inline-flex h-10 items-center gap-2 border border-mpk-line px-4 text-sm font-medium text-mpk-ink transition-colors hover:border-mpk-blue hover:text-mpk-blue"
                 >
-                  Browse components
+                  Browse all components
                 </Link>
               </div>
             </div>
@@ -181,10 +181,18 @@ export default function Home() {
               <p className="font-mpk-mono text-xs text-mpk-amber">$ mpkcn list</p>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight text-mpk-ink sm:text-4xl">Three components, live.</h2>
             </div>
-            <p className="max-w-md text-sm leading-6 text-mpk-dim">
-              Everything below is the real component running on this page. Click the boot screen to skip it, or replay
-              it.
-            </p>
+            <div className="flex max-w-md flex-col items-start gap-3 sm:items-end sm:text-right">
+              <p className="text-sm leading-6 text-mpk-dim">
+                Everything below is the real component running on this page. Click the boot screen to skip it, or
+                replay it.
+              </p>
+              <Link
+                href="/components/"
+                className="inline-flex items-center gap-1.5 font-mpk-mono text-xs text-mpk-blue underline-offset-4 hover:underline"
+              >
+                Browse all components <ArrowRightIcon width={12} height={12} />
+              </Link>
+            </div>
           </div>
 
           <div className="grid gap-4 lg:grid-cols-3">

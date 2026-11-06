@@ -96,7 +96,7 @@ export function MobileNav() {
                   <Link href="/docs/" className="py-1.5 text-sm text-mpk-dim hover:text-mpk-ink">
                     Docs
                   </Link>
-                  <Link href="/docs/components/boot-screen/" className="py-1.5 text-sm text-mpk-dim hover:text-mpk-ink">
+                  <Link href="/components/" className="py-1.5 text-sm text-mpk-dim hover:text-mpk-ink">
                     Components
                   </Link>
                 </div>
