@@ -1,0 +1,5 @@
+{ "name": "card", "title": "Card", "description": "A hairline card that uses the button.", "dependencies": ["clsx", "framer-motion"], "registryDependencies": ["button", "theme"],
+  "files": [
+    { "target": "card.tsx", "content": "export function Card() { return null; }\n" },
+    { "target": "lib/card-utils.ts", "content": "export const x = 1;\n" }
+  ] }

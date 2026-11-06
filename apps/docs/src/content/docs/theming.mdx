@@ -1,0 +1,81 @@
+## Tokens
+
+Every mpkcn component is styled with eight CSS variables. The dark values live on `:root` and `.dark`, the light values on `.light`. Tailwind 4 turns each one into a color utility (`bg-mpk-*`, `text-mpk-*`, `border-mpk-*`, …).
+
+<TokenTable />
+
+Two font stacks and one animation complete the set:
+
+| Variable | Value | Utility |
+| --- | --- | --- |
+| `--font-mpk-sans` | Space Grotesk, system sans fallback | `font-mpk-sans` |
+| `--font-mpk-mono` | JetBrains Mono, system mono fallback | `font-mpk-mono` |
+| `--animate-mpk-blink` | `mpk-blink 1s steps(1) infinite` | `animate-mpk-blink` |
+
+## The theme file
+
+This is `mpkcn-theme.css` in full. It is the file the CLI writes next to your components:
+
+```css
+:root, .dark {
+  --mpk-bg: #0a0d10; --mpk-bg-soft: #10151a; --mpk-line: #1f2b34; --mpk-ink: #eef2f4;
+  --mpk-dim: #7c8fa0; --mpk-dim2: #47555f; --mpk-amber: #e8a33d; --mpk-blue: #6fb2ff;
+}
+.light {
+  --mpk-bg: oklch(0.975 0.006 240); --mpk-bg-soft: oklch(0.945 0.011 240); --mpk-line: oklch(0.86 0.014 240);
+  --mpk-ink: oklch(0.21 0.02 250); --mpk-dim: oklch(0.45 0.022 245); --mpk-dim2: oklch(0.5 0.02 245);
+  --mpk-amber: oklch(0.5 0.115 65); --mpk-blue: oklch(0.49 0.17 258);
+}
+@theme inline {
+  --color-mpk-bg: var(--mpk-bg); --color-mpk-bg-soft: var(--mpk-bg-soft); --color-mpk-line: var(--mpk-line);
+  --color-mpk-ink: var(--mpk-ink); --color-mpk-dim: var(--mpk-dim); --color-mpk-dim2: var(--mpk-dim2);
+  --color-mpk-amber: var(--mpk-amber); --color-mpk-blue: var(--mpk-blue);
+  --font-mpk-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --font-mpk-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --animate-mpk-blink: mpk-blink 1s steps(1) infinite;
+}
+@keyframes mpk-blink { 50% { opacity: 0; } }
+```
+
+## Customize
+
+Because the utilities read the variables at runtime, you change the look by overriding variables, not by editing components. Put overrides **after** the theme import:
+
+```css
+@import "tailwindcss";
+@import "../components/mpkcn/mpkcn-theme.css";
+
+/* A green phosphor accent instead of amber, in dark mode only */
+:root, .dark {
+  --mpk-amber: #7ee787;
+}
+
+/* A warmer light background */
+.light {
+  --mpk-bg: oklch(0.98 0.01 80);
+}
+```
+
+### Scope a theme to one section
+
+Variables cascade, so you can retheme a single part of the page:
+
+```tsx
+<section style={{ "--mpk-blue": "#c792ea" } as React.CSSProperties}>
+  <BootScreen fullscreen={false} />
+</section>
+```
+
+### Use the tokens in your own UI
+
+The utilities are regular Tailwind colors, so opacity modifiers work too:
+
+```tsx
+<div className="border border-mpk-line bg-mpk-bg-soft p-4 text-mpk-dim hover:border-mpk-blue/60">
+  <span className="font-mpk-mono text-mpk-amber">$</span> ready
+</div>
+```
+
+<Callout>
+  Check contrast when you change values. In the defaults, `ink` and `dim` are the text colors meant for reading; `dim2` is low contrast on purpose and is only for decoration and de-emphasized hints.
+</Callout>

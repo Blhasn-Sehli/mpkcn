@@ -1,0 +1,44 @@
+{
+  "name": "mpkcn",
+  "version": "0.1.0",
+  "description": "Add terminal-style React components from the mpkcn registry straight into your project.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "mpkcn": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blhasn-Sehli/mpkcn.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://blhasn-sehli.github.io/mpkcn",
+  "keywords": [
+    "mpkcn",
+    "cli",
+    "react",
+    "components",
+    "ui",
+    "tailwind",
+    "terminal",
+    "registry",
+    "shadcn"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}

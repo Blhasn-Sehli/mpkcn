@@ -1,0 +1,118 @@
+<ComponentPreview name="boot-screen" />
+
+## Installation
+
+<InstallTabs name="boot-screen" />
+
+## Usage
+
+Render it once, at the top of your root layout. By default it covers the whole page as a fixed overlay, plays once per browser session, then removes itself.
+
+```tsx
+import { BootScreen } from "@/components/mpkcn/boot-screen";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <BootScreen user="mpk" host="mpk.dev" />
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+The sequence: a clock at the top, a login box with the title set in its border, the username typed in, password dots, `authenticating…`, then an optional matrix rain and a fade out. Any key or click skips straight to the end.
+
+## Examples
+
+### Inside a box
+
+Pass `fullscreen={false}` to fill the nearest positioned parent instead of the viewport. Give the parent `position: relative` and a height. Change `key` to replay it.
+
+<ComponentPreview
+  name="boot-screen"
+  code={`import { useState } from "react";
+import { BootScreen } from "@/components/mpkcn/boot-screen";
+
+export function BootPreview() {
+  const [run, setRun] = useState(0);
+  return (
+    <div className="relative h-[420px] overflow-hidden border border-mpk-line">
+      <BootScreen key={run} fullscreen={false} oncePerSession={false} />
+      <button onClick={() => setRun((r) => r + 1)}>replay</button>
+    </div>
+  );
+}`}
+/>
+
+### Custom user, host and hints
+
+<ComponentPreview
+  name="boot-screen"
+  code={`<BootScreen
+  user="root"
+  host="prod-01"
+  matrix={false}
+  hints={[
+    { key: "F1", label: "Help" },
+    { key: "ANY KEY", label: "Continue" },
+  ]}
+/>`}
+>
+  <BootScreenDemo
+    user="root"
+    host="prod-01"
+    matrix={false}
+    hints={[
+      { key: "F1", label: "Help" },
+      { key: "ANY KEY", label: "Continue" },
+    ]}
+  />
+</ComponentPreview>
+
+### Run code when it ends
+
+`onDone` fires once when the screen finishes, is skipped, or is not shown at all (already seen this session, or reduced motion). Use it to start your own intro animations.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import { BootScreen } from "@/components/mpkcn/boot-screen";
+
+export function Intro({ children }: { children: React.ReactNode }) {
+  const [ready, setReady] = useState(false);
+  return (
+    <>
+      <BootScreen onDone={() => setReady(true)} />
+      <div data-ready={ready}>{children}</div>
+    </>
+  );
+}
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "user", type: "string", default: '"guest"', description: "Username typed into the login box." },
+    { prop: "host", type: "string", default: '"mpkcn.dev"', description: "Host shown in the box title, which reads \"Log in to {host}\"." },
+    { prop: "hints", type: "{ key: string; label: string }[]", default: "ESC · ENTER · ANY KEY", description: "Key-hint badges docked to the bottom. Defaults: ESC Reset, ENTER Start session, ANY KEY Skip." },
+    { prop: "matrix", type: "boolean", default: "true", description: "Play a short matrix rain after login. Skipped on low-power devices (4 cores or fewer, 4 GB memory or less, or Save-Data on)." },
+    { prop: "oncePerSession", type: "boolean", default: "true", description: "Play only once per browser session, using the sessionStorage key \"mpkcn-booted\"." },
+    { prop: "fullscreen", type: "boolean", default: "true", description: "Fixed overlay over the whole page. false fills the nearest positioned parent (for previews)." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Play even when the user prefers reduced motion. Only use it behind an explicit action, like a \"play anyway\" button." },
+    { prop: "onDone", type: "() => void", default: "—", description: "Called once when the screen finishes, is skipped, or is not shown at all." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the root element." },
+  ]}
+/>
+
+## Accessibility
+
+- Under `prefers-reduced-motion: reduce` the screen is skipped entirely and `onDone` fires right away, unless `ignoreReducedMotion` is set (the previews on this site only set it after you click "play anyway").
+- Any key or pointer press skips it. In fullscreen mode it listens on the window; inside a box, only on itself.
+- Inside a box it is a focusable `button` labelled "Boot screen. Press any key or click to skip.", with a visible focus ring.
+- Once finished it is `aria-hidden`, fades out and unmounts, so it never traps focus or hides content from screen readers.
+- The box-drawing corners and the matrix canvas are decorative and hidden from assistive technology.

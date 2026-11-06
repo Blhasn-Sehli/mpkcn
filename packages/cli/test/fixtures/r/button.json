@@ -1,0 +1,2 @@
+{ "name": "button", "title": "Button", "description": "A square terminal button.", "dependencies": ["clsx"], "registryDependencies": ["theme"],
+  "files": [{ "target": "button.tsx", "content": "export function Button() { return null; }\n" }] }

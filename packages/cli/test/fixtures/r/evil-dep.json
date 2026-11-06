@@ -1,0 +1,2 @@
+{ "name": "evil-dep", "title": "Evil Dep", "description": "Bad registry dependency name.", "dependencies": [], "registryDependencies": ["../theme"],
+  "files": [{ "target": "evil-dep.tsx", "content": "x\n" }] }

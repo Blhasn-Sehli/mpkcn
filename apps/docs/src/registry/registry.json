@@ -1,0 +1,37 @@
+[
+  {
+    "name": "theme",
+    "title": "Theme",
+    "description": "The mpkcn design tokens: dark and light palettes, mono and sans fonts, and the blink animation as Tailwind 4 theme variables.",
+    "dependencies": [],
+    "registryDependencies": [],
+    "files": [{ "path": "mpkcn-theme.css", "target": "mpkcn-theme.css" }]
+  },
+  {
+    "name": "boot-screen",
+    "title": "Boot Screen",
+    "description": "A tuigreet-style login screen with a typed username, password dots and optional matrix rain that plays before your page appears.",
+    "dependencies": [],
+    "registryDependencies": ["theme"],
+    "files": [
+      { "path": "boot-screen.tsx", "target": "boot-screen.tsx" },
+      { "path": "lib/matrix-rain.ts", "target": "lib/matrix-rain.ts" }
+    ]
+  },
+  {
+    "name": "theme-toggle",
+    "title": "Theme Toggle",
+    "description": "A dark and light switch for next-themes, as a round icon button or a mono text flag, with no hydration flash.",
+    "dependencies": ["next-themes"],
+    "registryDependencies": ["theme"],
+    "files": [{ "path": "theme-toggle.tsx", "target": "theme-toggle.tsx" }]
+  },
+  {
+    "name": "reveal",
+    "title": "Reveal",
+    "description": "Fades and slides content in as it scrolls into view, and keeps still under reduced motion.",
+    "dependencies": ["framer-motion"],
+    "registryDependencies": ["theme"],
+    "files": [{ "path": "reveal.tsx", "target": "reveal.tsx" }]
+  }
+]

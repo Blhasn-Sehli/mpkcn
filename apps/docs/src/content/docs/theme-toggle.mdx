@@ -1,0 +1,60 @@
+<ComponentPreview name="theme-toggle" minHeight={200} />
+
+## Installation
+
+<InstallTabs name="theme-toggle" />
+
+<Callout>
+  The toggle needs a `ThemeProvider` from `next-themes` with `attribute="class"` higher in the tree. See [Installation](/docs/installation/#add-next-themes).
+</Callout>
+
+## Usage
+
+```tsx
+import { ThemeToggle } from "@/components/mpkcn/theme-toggle";
+
+export function Header() {
+  return (
+    <header className="flex items-center justify-between border-b border-mpk-line px-6 py-3">
+      <span className="font-mpk-mono">mpkcn</span>
+      <ThemeToggle />
+    </header>
+  );
+}
+```
+
+It reads `resolvedTheme` and switches between `dark` and `light`. Until it has mounted it renders an invisible placeholder of the same size, so there is no hydration mismatch and no layout shift.
+
+## Examples
+
+### Icon
+
+The default. A round button with a moon in dark mode and a sun in light mode; they swap with a small spin.
+
+<ComponentPreview name="theme-toggle" minHeight={180} code={`<ThemeToggle />`}>
+  <ThemeToggleDemo variant="icon" />
+</ComponentPreview>
+
+### Text
+
+A mono flag with a hairline border that shows the **current** theme: `--dark` in dark mode, `--light` in light mode. It turns blue on hover.
+
+<ComponentPreview name="theme-toggle" minHeight={180} code={`<ThemeToggle variant="text" />`}>
+  <ThemeToggleDemo variant="text" />
+</ComponentPreview>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "variant", type: '"icon" | "text"', default: '"icon"', description: "icon: round button with a moon or sun. text: mono button reading --dark / --light (the current theme)." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the button." },
+  ]}
+/>
+
+## Accessibility
+
+- It is a native `button` with an `aria-label` and `title` that name the action, e.g. "Switch to light theme".
+- The icons are `aria-hidden`; the label carries the meaning.
+- Focus is visible with a 1px amber outline.
+- The icon spin and hover lift are turned off under `prefers-reduced-motion`.

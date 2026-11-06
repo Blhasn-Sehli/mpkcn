@@ -1,0 +1,2 @@
+{ "name": "theme", "title": "Theme", "description": "mpkcn color tokens and fonts.", "dependencies": [], "registryDependencies": [],
+  "files": [{ "target": "mpkcn-theme.css", "content": ":root { --mpk-bg: #0a0d10; }\n" }] }

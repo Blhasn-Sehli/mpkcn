@@ -1,0 +1,5 @@
+{ "name": "evil", "title": "Evil", "description": "Tries to escape the components folder.", "dependencies": [], "registryDependencies": [],
+  "files": [
+    { "target": "ok.tsx", "content": "fine\n" },
+    { "target": "../evil", "content": "pwned\n" }
+  ] }

@@ -1,0 +1,129 @@
+@import "tailwindcss";
+@import "../registry/mpkcn-theme.css";
+
+/* Tailwind scans these for class names, including the MDX content. */
+@source "../content";
+
+/* .dark / .light on <html> come from next-themes (attribute "class"). */
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
+
+/* Bind the token fonts to next/font (variables set on <html> in layout.tsx). */
+@theme inline {
+  --font-mpk-mono: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --font-mpk-sans: var(--font-space-grotesk), "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-mpk-sans);
+  --font-mono: var(--font-mpk-mono);
+}
+
+/* Shiki css-variables theme, mapped onto mpk tokens. */
+:root,
+.dark {
+  --shiki-foreground: var(--mpk-ink);
+  --shiki-background: transparent;
+  --shiki-token-comment: var(--mpk-dim2);
+  --shiki-token-keyword: var(--mpk-blue);
+  --shiki-token-string: var(--mpk-amber);
+  --shiki-token-string-expression: var(--mpk-amber);
+  --shiki-token-constant: color-mix(in oklab, var(--mpk-amber) 70%, var(--mpk-ink));
+  --shiki-token-function: color-mix(in oklab, var(--mpk-blue) 55%, var(--mpk-ink));
+  --shiki-token-parameter: var(--mpk-ink);
+  --shiki-token-punctuation: var(--mpk-dim);
+  --shiki-token-link: var(--mpk-blue);
+  --shiki-token-inserted: var(--mpk-blue);
+  --shiki-token-deleted: var(--mpk-amber);
+  --shiki-token-changed: var(--mpk-dim);
+  color-scheme: dark;
+}
+.light {
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background-color: var(--mpk-bg);
+    color: var(--mpk-ink);
+    font-family: var(--font-mpk-sans);
+    font-feature-settings: "ss01";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--mpk-amber) 35%, transparent);
+    color: var(--mpk-ink);
+  }
+  :focus-visible {
+    outline: 1px solid var(--mpk-blue);
+    outline-offset: 2px;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--mpk-line) transparent;
+  }
+}
+
+/* Shiki output */
+.shiki {
+  background: transparent !important;
+  font-family: var(--font-mpk-mono);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  tab-size: 2;
+}
+.shiki code {
+  display: grid;
+  min-width: max-content;
+}
+.shiki .line {
+  min-height: 1lh;
+  padding-inline: 1rem;
+}
+
+/* <Steps>: numbers each h3 inside, with a hairline rail. */
+.mpk-steps {
+  counter-reset: step;
+  border-left: 1px solid var(--mpk-line);
+  margin-left: 0.875rem;
+  padding-left: 1.75rem;
+}
+.mpk-steps > h3 {
+  counter-increment: step;
+  position: relative;
+}
+.mpk-steps > h3::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: calc(-1.75rem - 0.875rem - 0.5px);
+  top: 0.05rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mpk-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--mpk-amber);
+  background: var(--mpk-bg);
+  border: 1px solid var(--mpk-line);
+}
+
+/* Faint grid used behind hero / previews */
+.mpk-grid-bg {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--mpk-line) 55%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--mpk-line) 55%, transparent) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-mpk-blink {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

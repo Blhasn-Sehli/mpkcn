@@ -1,0 +1,70 @@
+## Usage
+
+Run it with `npx`, no install needed. It requires Node.js 22 or newer and has no runtime dependencies.
+
+```bash
+npx mpkcn <command> [options]
+```
+
+## add
+
+Copies one or more components, plus everything they depend on, into your project:
+
+```bash
+npx mpkcn add boot-screen
+npx mpkcn add theme-toggle reveal
+```
+
+For each item, `add`:
+
+- resolves its `registryDependencies` (every component pulls in `theme`, the `mpkcn-theme.css` file);
+- writes the files to the target folder, keeping sub-folders such as `lib/matrix-rain.ts`;
+- skips files that already exist, unless you pass `--overwrite`;
+- prints the npm packages to install, for example `npm i next-themes`. It does not run your package manager.
+
+Item names must match `[a-z0-9-]+`. Every file target is checked before anything is written: absolute paths and paths that leave the target folder are rejected.
+
+## list
+
+Shows every item in the registry with its description:
+
+```bash
+npx mpkcn list
+```
+
+## Options
+
+| Option | Description | Default |
+| --- | --- | --- |
+| `-d, --dir <path>` | Folder the files are written to | `src/components/mpkcn`, or `components/mpkcn` without `src/` |
+| `-r, --registry <url>` | Registry URL, or a local folder | `https://blhasn-sehli.github.io/mpkcn/r` |
+| `-o, --overwrite` | Replace files that already exist | off |
+| `-y, --yes` | Non-interactive (mpkcn never prompts; accepted for scripts) | off |
+| `-h, --help` | Show usage | |
+| `-v, --version` | Show the version | |
+
+### --dir
+
+```bash
+npx mpkcn add reveal --dir app/ui/terminal
+```
+
+### --registry
+
+Point the CLI at another registry, such as a fork of mpkcn or a local build of this site:
+
+```bash
+npx mpkcn add boot-screen --registry https://example.com/r
+npx mpkcn add boot-screen --registry ./apps/docs/public/r
+```
+
+## Registry format
+
+The registry is a set of static JSON files served by this site:
+
+| File | Content |
+| --- | --- |
+| `/r/index.json` | `{ name, title, description }[]` |
+| `/r/<name>.json` | `{ name, title, description, dependencies, registryDependencies, files: { target, content }[] }` |
+
+Anyone can host a compatible registry: any static file host that serves these two shapes works with `--registry`.

@@ -1,0 +1,92 @@
+<ComponentPreview name="reveal" />
+
+## Installation
+
+<InstallTabs name="reveal" />
+
+## Usage
+
+Wrap anything that should appear as it scrolls into view:
+
+```tsx
+import { Reveal } from "@/components/mpkcn/reveal";
+
+export function Features() {
+  return (
+    <section className="grid gap-4 sm:grid-cols-3">
+      <Reveal>
+        <Card title="Copy" />
+      </Reveal>
+      <Reveal delay={0.1}>
+        <Card title="Paste" />
+      </Reveal>
+      <Reveal delay={0.2}>
+        <Card title="Own" />
+      </Reveal>
+    </section>
+  );
+}
+```
+
+The content fades in over 0.7s with the ease `[0.22, 1, 0.36, 1]` once 20% of it is visible. `Reveal` is a client component, but its children can be server components.
+
+## Examples
+
+### Directions
+
+`from` sets where the content comes from: `up` (default), `left`, `right` or `scale`.
+
+<ComponentPreview
+  name="reveal"
+  code={`<Reveal from="up">…</Reveal>
+<Reveal from="left" delay={0.12}>…</Reveal>
+<Reveal from="right" delay={0.24}>…</Reveal>
+<Reveal from="scale" delay={0.36}>…</Reveal>`}
+>
+  <RevealDemo />
+</ComponentPreview>
+
+### Stagger a list
+
+Give each item a growing `delay` to cascade them:
+
+```tsx
+{items.map((item, i) => (
+  <Reveal key={item.id} delay={i * 0.08}>
+    <Row item={item} />
+  </Reveal>
+))}
+```
+
+### Replay on every scroll
+
+By default an element animates only the first time it enters the viewport. Set `once={false}` to animate it every time it comes back into view.
+
+```tsx
+<Reveal from="scale" once={false}>
+  <Stat value="99.9%" label="uptime" />
+</Reveal>
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "children", type: "React.ReactNode", default: "—", description: "Content to reveal." },
+    { prop: "from", type: '"up" | "left" | "right" | "scale"', default: '"up"', description: "Direction the content comes in from." },
+    { prop: "delay", type: "number", default: "0", description: "Delay before the animation starts, in seconds." },
+    { prop: "once", type: "boolean", default: "true", description: "Animate only the first time it scrolls into view." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Animate even when the user prefers reduced motion. Only use it behind an explicit action, like a \"play anyway\" button." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the wrapper div." },
+  ]}
+/>
+
+## Accessibility
+
+- Under `prefers-reduced-motion: reduce` nothing moves: position and scale snap into place and only the opacity fades. `ignoreReducedMotion` overrides this; keep it behind an explicit user action.
+- The wrapper is a plain `div` with no role, so the content is read exactly as written.
+- Server and client render the same markup, so there is no hydration mismatch.
+
+<Callout type="warn">
+  Content starts at opacity 0 until JavaScript runs. Don't wrap text that must be visible without JavaScript, such as the main heading of a page.
+</Callout>

@@ -1,0 +1,33 @@
+## What is mpkcn?
+
+mpkcn is a small set of React components with a terminal feel: a login-style **boot screen**, a **theme toggle** and a scroll **reveal**. They come from the portfolio of MpK and are now packaged so anyone can use them.
+
+It is not a library you install from npm. Like [shadcn/ui](https://ui.shadcn.com), you run one command and the component's source is copied into your project:
+
+```bash
+npx mpkcn add boot-screen
+```
+
+From then on the code is yours. Read it, change the timings, rename the props, delete what you don't need. There is no package to upgrade and no API to fight.
+
+## Principles
+
+- **You own the code.** Every component is one readable file (plus a helper when needed), styled with Tailwind classes.
+- **Tokens, not colors.** Components only use eight `--mpk-*` CSS variables, so a theme change is a few lines of CSS. See [Theming](/docs/theming/).
+- **Dark first, light ready.** Dark is the default; every token has a light value too, switched with `next-themes`.
+- **Quiet details.** Square corners, hairline borders, no shadows, amber and blue accents, monospace where it means something.
+- **Accessible by default.** Visible focus, labelled icon buttons, and `prefers-reduced-motion` respected everywhere.
+
+## Components
+
+| Component | What it does | Extra npm deps |
+| --- | --- | --- |
+| [Boot Screen](/docs/components/boot-screen/) | tuigreet-style login intro with optional matrix rain | none |
+| [Theme Toggle](/docs/components/theme-toggle/) | Dark / light switch as an icon or a `--flag` | `next-themes` |
+| [Reveal](/docs/components/reveal/) | Fade and slide in on scroll | `framer-motion` |
+
+## Next steps
+
+<Callout title="New here?">
+  Start with [Installation](/docs/installation/) to set up Tailwind 4, `next-themes` and the theme file, then add your first component with the [CLI](/docs/cli/).
+</Callout>

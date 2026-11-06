@@ -1,0 +1,18 @@
+:root, .dark {
+  --mpk-bg: #0a0d10; --mpk-bg-soft: #10151a; --mpk-line: #1f2b34; --mpk-ink: #eef2f4;
+  --mpk-dim: #7c8fa0; --mpk-dim2: #47555f; --mpk-amber: #e8a33d; --mpk-blue: #6fb2ff;
+}
+.light {
+  --mpk-bg: oklch(0.975 0.006 240); --mpk-bg-soft: oklch(0.945 0.011 240); --mpk-line: oklch(0.86 0.014 240);
+  --mpk-ink: oklch(0.21 0.02 250); --mpk-dim: oklch(0.45 0.022 245); --mpk-dim2: oklch(0.5 0.02 245);
+  --mpk-amber: oklch(0.5 0.115 65); --mpk-blue: oklch(0.49 0.17 258);
+}
+@theme inline {
+  --color-mpk-bg: var(--mpk-bg); --color-mpk-bg-soft: var(--mpk-bg-soft); --color-mpk-line: var(--mpk-line);
+  --color-mpk-ink: var(--mpk-ink); --color-mpk-dim: var(--mpk-dim); --color-mpk-dim2: var(--mpk-dim2);
+  --color-mpk-amber: var(--mpk-amber); --color-mpk-blue: var(--mpk-blue);
+  --font-mpk-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --font-mpk-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --animate-mpk-blink: mpk-blink 1s steps(1) infinite;
+}
+@keyframes mpk-blink { 50% { opacity: 0; } }
