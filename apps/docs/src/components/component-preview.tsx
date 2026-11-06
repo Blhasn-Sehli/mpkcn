@@ -1,6 +1,14 @@
 import type { ReactNode } from "react";
 import { readComponentSource } from "@/lib/registry-source";
 import { CodeBlock } from "./code-block";
+import { AsciiImageDemo } from "./demos/ascii-image-demo";
+import { EyebrowDemo } from "./demos/eyebrow-demo";
+import { FeatureListDemo } from "./demos/feature-list-demo";
+import { ImagePlaceholderDemo } from "./demos/image-placeholder-demo";
+import { KbdDemo } from "./demos/kbd-demo";
+import { LetterRevealDemo } from "./demos/letter-reveal-demo";
+import { SectionDividerDemo } from "./demos/section-divider-demo";
+import { SectionRailDemo } from "./demos/section-rail-demo";
 import { BootScreenDemo } from "./demos/boot-screen-demo";
 import { RevealDemo } from "./demos/reveal-demo";
 import { ThemeToggleDemo } from "./demos/theme-toggle-demo";
@@ -10,6 +18,14 @@ const DEMOS: Record<string, () => ReactNode> = {
   "boot-screen": () => <BootScreenDemo />,
   "theme-toggle": () => <ThemeToggleDemo />,
   reveal: () => <RevealDemo />,
+  "ascii-image": () => <AsciiImageDemo />,
+  "eyebrow": () => <EyebrowDemo />,
+  "feature-list": () => <FeatureListDemo />,
+  "image-placeholder": () => <ImagePlaceholderDemo />,
+  "kbd": () => <KbdDemo />,
+  "letter-reveal": () => <LetterRevealDemo />,
+  "section-divider": () => <SectionDividerDemo />,
+  "section-rail": () => <SectionRailDemo />,
 };
 
 type ComponentPreviewProps = {
