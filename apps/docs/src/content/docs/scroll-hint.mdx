@@ -1,0 +1,80 @@
+import { ScrollHintDemo } from "@/components/demos/scroll-hint-demo";
+
+<ComponentPreview name="scroll-hint">
+  <ScrollHintDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="scroll-hint" />
+
+## Usage
+
+Put it at the bottom of your hero. It fades out over the first 80px of scroll.
+
+```tsx
+import { ScrollHint } from "@/components/mpkcn/scroll-hint";
+
+export function Hero() {
+  return (
+    <section className="relative h-dvh">
+      {/* … */}
+      <div className="absolute inset-x-0 bottom-8 flex justify-center">
+        <ScrollHint target="#work" />
+      </div>
+    </section>
+  );
+}
+```
+
+With `target` it becomes a link that scrolls to that element and moves focus there. With only `onClick` it is a button. With neither it is purely decorative and hidden from screen readers.
+
+## Examples
+
+### Variants
+
+`"line"` runs a block down a hairline, `"chevron"` bounces an arrow, `"mouse"` rolls a wheel. Use the buttons under the first preview to switch.
+
+<ComponentPreview
+  name="scroll-hint"
+  code={`<ScrollHint variant="mouse" label="" target="#next" />`}
+>
+  <ScrollHintDemo variant="mouse" />
+</ComponentPreview>
+
+### Inside a scroll container
+
+By default it watches the page. Pass `container` (a ref) to watch a scrolling element instead, as the previews do.
+
+```tsx
+const box = useRef<HTMLDivElement>(null);
+
+<div ref={box} className="h-96 overflow-y-auto">
+  <ScrollHint container={box} target="#next" scrollBlock="nearest" />
+  …
+</div>
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "label", type: "string", default: '"scroll"', description: "Mono text above the indicator. An empty string hides it." },
+    { prop: "variant", type: '"line" | "chevron" | "mouse"', default: '"line"', description: "Shape of the indicator." },
+    { prop: "target", type: "string", default: "—", description: 'Selector to scroll to on click, e.g. "#work". Makes it a link.' },
+    { prop: "scrollBlock", type: "ScrollLogicalPosition", default: '"start"', description: "How the target lines up after the scroll." },
+    { prop: "onClick", type: "() => void", default: "—", description: "Called on click. Makes it a button when there is no target." },
+    { prop: "ariaLabel", type: "string", default: '"Scroll down"', description: "Accessible name of the link or button." },
+    { prop: "hideAfter", type: "number | null", default: "80", description: "Pixels of scroll before it has fully faded. null keeps it visible." },
+    { prop: "container", type: "RefObject<HTMLElement | null>", default: "—", description: "Scroll container to watch instead of the page." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Animate even under reduced motion. Only use it behind an explicit action." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the root." },
+  ]}
+/>
+
+## Accessibility
+
+- As a link or a button it has the name "Scroll down" (change it with `ariaLabel`) and a visible focus ring. The label and the animation inside it are hidden from screen readers.
+- After the scroll, focus moves to the target (it gets `tabindex="-1"` if it is not focusable), so keyboard users continue from there.
+- Once it has faded out it ignores the pointer and leaves the tab order.
+- Under `prefers-reduced-motion: reduce` the indicator holds still and the jump is instant instead of smooth.

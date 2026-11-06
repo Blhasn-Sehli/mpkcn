@@ -1,0 +1,76 @@
+import { EnvCardDemo } from "@/components/demos/env-card-demo";
+
+<ComponentPreview name="env-card">
+  <EnvCardDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="env-card" />
+
+## Usage
+
+Pass the lines of the file. A line is a variable (`key` and `value`) or a `comment`.
+
+```tsx
+import { EnvCard } from "@/components/mpkcn/env-card";
+
+export function Contact() {
+  return (
+    <EnvCard
+      filename=".env.contact"
+      entries={[
+        { comment: "reach me" },
+        { key: "EMAIL", value: "you@example.com", href: "mailto:you@example.com" },
+        { key: "GITHUB", value: "github.com/you", href: "https://github.com/you" },
+        { key: "STATUS", value: "open_to_work", live: true, copy: false },
+      ]}
+    />
+  );
+}
+```
+
+Keys are amber, values blue and in quotes. Numbers and `true` / `false` print bare, in amber, like a real `.env` highlighter would.
+
+## Examples
+
+### Links and copy
+
+`href` turns a value into a link (`http(s)` links open in a new tab). Every variable gets a copy button unless you set `copyable={false}` on the card or `copy: false` on the line. `copyValue` copies something other than what is shown, such as the full URL behind a short one.
+
+```tsx
+{ key: "SITE", value: "you.dev", href: "https://you.dev", copyValue: "https://you.dev" }
+```
+
+### Secrets
+
+`secret: true` masks the value with dots behind a show / hide toggle. The copy button still copies the real value, so people can grab a key without it ever showing on screen.
+
+```tsx
+{ key: "API_TOKEN", value: token, secret: true }
+```
+
+The value is still in the page's JavaScript: masking keeps it off the screen, not out of the browser. Never pass a real server secret to a client component.
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "entries", type: "(EnvEntry | { comment: string })[]", default: "—", description: "Lines of the file, top to bottom." },
+    { prop: "filename", type: "string | null", default: '".env"', description: "File name in the header. null hides the header." },
+    { prop: "lineNumbers", type: "boolean", default: "true", description: "Show line numbers (hidden when the card is narrow)." },
+    { prop: "copyable", type: "boolean", default: "true", description: "Give every variable a copy button unless the line says otherwise." },
+    { prop: "maskChar", type: "string", default: '"•"', description: "Character used to mask secrets." },
+    { prop: "actions", type: "ReactNode", default: "—", description: "Extra content on the right of the header." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the card." },
+  ]}
+/>
+
+`EnvEntry` is `{ key: string; value: string; href?: string; secret?: boolean; copy?: boolean; copyValue?: string; live?: boolean; comment?: string }`. `live` adds a blinking dot before the value; `comment` adds a trailing `# comment` on wide cards.
+
+## Accessibility
+
+- Copy and show / hide are real buttons named after the variable ("Copy EMAIL", "Show API_TOKEN"), with a visible focus ring. The toggle reports its state with `aria-pressed`.
+- A masked value is read as "hidden value", never as a string of dots.
+- The result of a copy ("EMAIL copied to clipboard", or a failure) is announced through a polite live region, and the button label changes for two seconds.
+- Line numbers are decorative and hidden. The live dot stops blinking under `prefers-reduced-motion: reduce`.

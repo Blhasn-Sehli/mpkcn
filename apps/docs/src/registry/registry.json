@@ -13,6 +13,23 @@
     ]
   },
   {
+    "name": "theme-provider",
+    "title": "Theme Provider",
+    "description": "next-themes with the mpkcn defaults (class attribute, dark first, dark and light only). The CLI wires it into your root layout.",
+    "dependencies": [
+      "next-themes"
+    ],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "theme-provider.tsx",
+        "target": "theme-provider.tsx"
+      }
+    ]
+  },
+  {
     "name": "boot-screen",
     "title": "Boot Screen",
     "description": "A tuigreet-style login screen with a typed username, password dots and optional matrix rain that plays before your page appears.",
@@ -39,7 +56,8 @@
       "next-themes"
     ],
     "registryDependencies": [
-      "theme"
+      "theme",
+      "theme-provider"
     ],
     "files": [
       {
@@ -386,6 +404,181 @@
       {
         "path": "tmux-bar.tsx",
         "target": "tmux-bar.tsx"
+      }
+    ]
+  },
+  {
+    "name": "arch-diagram",
+    "title": "Arch Diagram",
+    "description": "A small architecture diagram of boxes on a grid joined by right-angled lines; pick a box to light up its links and print its details.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "arch-diagram.tsx",
+        "target": "arch-diagram.tsx"
+      }
+    ]
+  },
+  {
+    "name": "case-card",
+    "title": "Case Card",
+    "description": "A project case study card: name, one-liner, tags, links and a screenshot beside a spec-sheet list of features.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "case-card.tsx",
+        "target": "case-card.tsx"
+      }
+    ]
+  },
+  {
+    "name": "env-card",
+    "title": "Env Card",
+    "description": "Contact or config details shown as a syntax-colored .env file, with links, copy buttons and masked secrets.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "env-card.tsx",
+        "target": "env-card.tsx"
+      }
+    ]
+  },
+  {
+    "name": "fetch-card",
+    "title": "Fetch Card",
+    "description": "A neofetch-style info card: ASCII art, a user@host header, key / value rows and a palette strip, with lines that slide in and art that tilts towards the pointer.",
+    "dependencies": [
+      "framer-motion"
+    ],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "fetch-card.tsx",
+        "target": "fetch-card.tsx"
+      }
+    ]
+  },
+  {
+    "name": "file-explorer",
+    "title": "File Explorer",
+    "description": "A ranger-style file browser with Miller columns, a preview pane, a path bar and a / filter, driven entirely from the keyboard.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "file-explorer.tsx",
+        "target": "file-explorer.tsx"
+      }
+    ]
+  },
+  {
+    "name": "media-lightbox",
+    "title": "Media Lightbox",
+    "description": "An accessible image and video lightbox with arrows, keyboard and swipe navigation, thumbnails, click-to-zoom and a focus trap.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "media-lightbox.tsx",
+        "target": "media-lightbox.tsx"
+      }
+    ]
+  },
+  {
+    "name": "parallax-image",
+    "title": "Parallax Image",
+    "description": "An image in a viewfinder frame that drifts with the pointer and with scroll, and holds still under reduced motion.",
+    "dependencies": [
+      "framer-motion"
+    ],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "parallax-image.tsx",
+        "target": "parallax-image.tsx"
+      }
+    ]
+  },
+  {
+    "name": "prompt-footer",
+    "title": "Prompt Footer",
+    "description": "A site footer laid out as a shell session: ls prints your link columns, date the copyright and an optional live clock, and the last prompt blinks.",
+    "dependencies": [],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "prompt-footer.tsx",
+        "target": "prompt-footer.tsx"
+      }
+    ]
+  },
+  {
+    "name": "scroll-hint",
+    "title": "Scroll Hint",
+    "description": "An animated scroll-down indicator (line, chevron or mouse) that fades out as you scroll and can jump to the next section.",
+    "dependencies": [
+      "framer-motion"
+    ],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "scroll-hint.tsx",
+        "target": "scroll-hint.tsx"
+      }
+    ]
+  },
+  {
+    "name": "site-header",
+    "title": "Site Header",
+    "description": "A sticky terminal-style top bar with a logo slot and block cursor, numbered links with a sliding active marker, an actions slot and a drop-down mobile menu.",
+    "dependencies": [
+      "framer-motion"
+    ],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "site-header.tsx",
+        "target": "site-header.tsx"
+      }
+    ]
+  },
+  {
+    "name": "tech-stack",
+    "title": "Tech Stack",
+    "description": "A tech stack grouped by category, as a stack.json file or a chip grid, with optional icons and a jq-style detail panel for the picked item.",
+    "dependencies": [
+      "framer-motion"
+    ],
+    "registryDependencies": [
+      "theme"
+    ],
+    "files": [
+      {
+        "path": "tech-stack.tsx",
+        "target": "tech-stack.tsx"
       }
     ]
   }

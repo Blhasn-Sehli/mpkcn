@@ -1,0 +1,92 @@
+import { CaseCardDemo } from "@/components/demos/case-card-demo";
+
+<ComponentPreview name="case-card">
+  <CaseCardDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="case-card" />
+
+## Usage
+
+One card per project. Stack several in a list; each one draws a hairline above and below, so neighbours share a line.
+
+```tsx
+import { CaseCard } from "@/components/mpkcn/case-card";
+
+export function Work() {
+  return (
+    <CaseCard
+      index="01"
+      title="Atlas"
+      subtitle="Offline map viewer · 2026"
+      description="Streams vector tiles and keeps working on a plane."
+      tags={["Next.js", "MapLibre"]}
+      links={[{ label: "code", href: "https://github.com/you/atlas", ariaLabel: "Atlas source code" }]}
+      image={{ src: "/shots/atlas.png", alt: "Atlas map view" }}
+      features={[
+        { label: "Cache", value: "IndexedDB" },
+        { label: "Bundle", value: "92 kB gz" },
+      ]}
+    />
+  );
+}
+```
+
+With `features`, the card splits into two columns once it is 768px wide (a container query, so it also stacks inside a narrow layout). Without them it stays one column.
+
+## Examples
+
+### Text only
+
+Leave out `image` and `features` for a short entry. A missing or broken `image.src` shows a striped "screenshot coming soon" placeholder instead.
+
+<ComponentPreview
+  name="case-card"
+  code={`<CaseCard
+  index="01"
+  title="Atlas"
+  subtitle="Offline map viewer · 2026"
+  description="Streams vector tiles and keeps working on a plane."
+  tags={["Next.js", "MapLibre"]}
+  links={links}
+/>`}
+>
+  <CaseCardDemo compact />
+</ComponentPreview>
+
+### Placeholder
+
+<ComponentPreview
+  name="case-card"
+  code={`<CaseCard title="Relay" subtitle="Webhook relay · 2025" image={{ alt: "Relay dashboard" }} />`}
+>
+  <CaseCardDemo compact title="Relay" index="02" subtitle="Webhook relay · 2025" links={[]} image={{ alt: "Relay dashboard" }} />
+</ComponentPreview>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "title", type: "ReactNode", default: "—", description: "Project name, shown large." },
+    { prop: "index", type: "string", default: "—", description: "Small number or tag above the title." },
+    { prop: "subtitle", type: "ReactNode", default: "—", description: "Mono line under the title." },
+    { prop: "description", type: "ReactNode", default: "—", description: "A sentence or two about the project." },
+    { prop: "role", type: "ReactNode", default: "—", description: "What you did on it, as a second paragraph." },
+    { prop: "tags", type: "string[]", default: "[]", description: "Tech or topic tags." },
+    { prop: "links", type: "{ label; href; ariaLabel? }[]", default: "[]", description: "Buttons under the tags; http(s) links open in a new tab." },
+    { prop: "image", type: "{ src?; alt }", default: "—", description: "Screenshot; a missing or broken src shows a placeholder." },
+    { prop: "media", type: "ReactNode", default: "—", description: "Your own media in place of image." },
+    { prop: "features", type: "{ label; value }[]", default: "—", description: "Spec rows in the second column." },
+    { prop: "headingLevel", type: "2 | 3 | 4", default: "3", description: "Heading level of the title." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the card." },
+  ]}
+/>
+
+## Accessibility
+
+- Each card is an `<article>` with a real heading; pick `headingLevel` to fit your page outline.
+- Tags are a list labelled "Tags", and features a description list, so each label is tied to its value.
+- Give links an `ariaLabel` like "Atlas source code" when several cards share the same "code" label. External links also say "(opens in a new tab)".
+- The placeholder is an image named by `image.alt`. Nothing in the card moves, so there is no motion to reduce.

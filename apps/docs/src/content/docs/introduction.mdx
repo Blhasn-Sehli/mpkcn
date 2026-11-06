@@ -1,6 +1,6 @@
 ## What is mpkcn?
 
-mpkcn is a set of 24 React components with a terminal feel: a login-style **boot screen**, **terminal windows and shells**, a **command palette**, a **tmux status bar**, and quiet effects like **grain**, **spotlight** and scroll **reveals**. Browse them all, running live, in the [gallery](/components/). They come from the portfolio of MpK and are now packaged so anyone can use them.
+mpkcn is a set of 35 React components with a terminal feel: a login-style **boot screen**, **terminal windows and shells**, a **command palette**, a **tmux status bar**, and quiet effects like **grain**, **spotlight** and scroll **reveals**. Browse them all, running live, in the [gallery](/components/). They come from the portfolio of MpK and are now packaged so anyone can use them.
 
 It is not a library you install from npm. Like [shadcn/ui](https://ui.shadcn.com), you run one command and the component's source is copied into your project:
 
@@ -22,25 +22,36 @@ From then on the code is yours. Read it, change the timings, rename the props, d
 
 | Component | What it does | Extra npm deps |
 | --- | --- | --- |
+| [Arch Diagram](/docs/components/arch-diagram/) | A small architecture diagram of boxes on a grid joined by right-angled lines; pick a box to light up its links and print its details. | none |
 | [ASCII Image](/docs/components/ascii-image/) | An image that starts as a wall of flickering code glyphs and decodes into the real picture in a left-to-right sweep. | none |
 | [Back to Top](/docs/components/back-to-top/) | A small square button that appears after the first screen and scrolls back up, with a reduced-motion jump and optional focus target. | none |
 | [Boot Screen](/docs/components/boot-screen/) | A tuigreet-style login screen with a typed username, password dots and optional matrix rain that plays before your page appears. | none |
+| [Case Card](/docs/components/case-card/) | A project case study card: name, one-liner, tags, links and a screenshot beside a spec-sheet list of features. | none |
 | [Command Palette](/docs/components/command-palette/) | A terminal-style Ctrl+K command palette with groups, fuzzy word filtering and full keyboard control, as a dialog or inline. | none |
 | [Cursor](/docs/components/cursor/) | A terminal-style pointer follower, a block caret with a trailing square ring and magnetic buttons, that steps aside for touch, text fields, the keyboard and reduced motion. | none |
+| [Env Card](/docs/components/env-card/) | Contact or config details shown as a syntax-colored .env file, with links, copy buttons and masked secrets. | none |
 | [Eyebrow](/docs/components/eyebrow/) | A small mono label for above a heading that types itself out, with a block cursor, as it scrolls into view. | none |
 | [Feature List](/docs/components/feature-list/) | A spec-sheet list of label and value rows between hairlines, sliding in one by one. | `framer-motion` |
+| [Fetch Card](/docs/components/fetch-card/) | A neofetch-style info card: ASCII art, a user@host header, key / value rows and a palette strip, with lines that slide in and art that tilts towards the pointer. | `framer-motion` |
+| [File Explorer](/docs/components/file-explorer/) | A ranger-style file browser with Miller columns, a preview pane, a path bar and a / filter, driven entirely from the keyboard. | none |
 | [Grain](/docs/components/grain/) | A static film-grain overlay in two blend layers that stays visible on both the dark and the light theme, at no per-frame cost. | none |
 | [Image Placeholder](/docs/components/image-placeholder/) | A framed image slot that shows a striped placeholder with a mono label until the image exists or when it fails to load. | none |
 | [Kbd](/docs/components/kbd/) | A keyboard key badge with a thick bottom edge, for single keys or combos like Ctrl + K. | none |
 | [Konami](/docs/components/konami/) | A useKonami hook and an easter-egg component that fires a callback and plays matrix rain when someone types the Konami code. | none |
 | [Letter Reveal](/docs/components/letter-reveal/) | Splits a heading into letters that spring up and flip into place one after another. | `framer-motion` |
+| [Media Lightbox](/docs/components/media-lightbox/) | An accessible image and video lightbox with arrows, keyboard and swipe navigation, thumbnails, click-to-zoom and a focus trap. | none |
+| [Parallax Image](/docs/components/parallax-image/) | An image in a viewfinder frame that drifts with the pointer and with scroll, and holds still under reduced motion. | `framer-motion` |
+| [Prompt Footer](/docs/components/prompt-footer/) | A site footer laid out as a shell session: ls prints your link columns, date the copyright and an optional live clock, and the last prompt blinks. | none |
 | [Reveal](/docs/components/reveal/) | Fades and slides content in as it scrolls into view, and keeps still under reduced motion. | `framer-motion` |
 | [Scene Canvas](/docs/components/scene-canvas/) | A slow wave rippling through a grid of dots on a canvas, capped at 30fps and paused off screen, in hidden tabs, on weak devices and under reduced motion. | none |
+| [Scroll Hint](/docs/components/scroll-hint/) | An animated scroll-down indicator (line, chevron or mouse) that fades out as you scroll and can jump to the next section. | `framer-motion` |
 | [Scroll Progress](/docs/components/scroll-progress/) | A thin accent bar that fills as the page or a scroll container is scrolled. | none |
 | [Section Divider](/docs/components/section-divider/) | A terminal-style break between sections: hairlines grow out and a linked label types "EOF about $ cd ../work". | none |
 | [Section Rail](/docs/components/section-rail/) | A slim side rail of numbered dots that tracks the section in view and jumps to a section on click. | none |
 | [Shortcuts Dialog](/docs/components/shortcuts-dialog/) | A keyboard-shortcut cheat sheet in a terminal-style dialog that opens with "?". | none |
+| [Site Header](/docs/components/site-header/) | A sticky terminal-style top bar with a logo slot and block cursor, numbered links with a sliding active marker, an actions slot and a drop-down mobile menu. | `framer-motion` |
 | [Spotlight](/docs/components/spotlight/) | A panel with a soft accent glow that follows the pointer while it hovers, drawn in CSS without re-rendering. | none |
+| [Tech Stack](/docs/components/tech-stack/) | A tech stack grouped by category, as a stack.json file or a chip grid, with optional icons and a jq-style detail panel for the picked item. | `framer-motion` |
 | [Terminal Form](/docs/components/terminal-form/) | A form that runs like a terminal prompt: one question at a time, editable answers, then a confirm step that hands the values to your callback. | none |
 | [Terminal Shell](/docs/components/terminal-shell/) | An interactive fake shell: you pass the commands, it handles the prompt, history, tab completion, help, clear and Ctrl+L. | none |
 | [Terminal Window](/docs/components/terminal-window/) | A terminal window with title bar and dots that types out commands and their output line by line, then shows your content. | none |

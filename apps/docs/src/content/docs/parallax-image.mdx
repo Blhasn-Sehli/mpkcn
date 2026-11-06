@@ -1,0 +1,75 @@
+import { ParallaxImageDemo } from "@/components/demos/parallax-image-demo";
+
+<ComponentPreview name="parallax-image">
+  <ParallaxImageDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="parallax-image" />
+
+## Usage
+
+Pass an image. Move the mouse over the preview and scroll the page to see both layers.
+
+```tsx
+import { ParallaxImage } from "@/components/mpkcn/parallax-image";
+
+export function Portrait() {
+  return (
+    <ParallaxImage
+      src="/me.jpg"
+      alt="Portrait of me at my desk"
+      caption={<><span>-- NORMAL --</span><span>scan_ok</span></>}
+      className="w-full max-w-md"
+    />
+  );
+}
+```
+
+Two layers move the picture: the pointer layer eases towards the mouse (relative to the window by default, or to the image with `pointerArea="element"`), and the scroll layer drifts it by `scroll` pixels while the frame crosses the viewport. The picture is enlarged by the biggest shift so its edges never show.
+
+## Examples
+
+### Stronger, without corners
+
+<ComponentPreview
+  name="parallax-image"
+  code={`<ParallaxImage src={src} alt="…" pointer={24} scroll={80} corners={false} />`}
+>
+  <ParallaxImageDemo pointer={24} scroll={80} corners={false} />
+</ComponentPreview>
+
+### Anything as the picture
+
+Leave out `src` and pass children that fill the box: `next/image` with `fill`, a canvas, an `ImagePlaceholder`.
+
+```tsx
+<ParallaxImage aspectRatio="16 / 9">
+  <Image src={hero} alt="…" fill sizes="50vw" className="object-cover" />
+</ParallaxImage>
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "src", type: "string", default: "—", description: "Image URL. Leave it out to pass children." },
+    { prop: "alt", type: "string", default: '""', description: 'Alt text for the image. "" marks it decorative.' },
+    { prop: "children", type: "ReactNode", default: "—", description: "Content to move instead of an image. Should fill its box." },
+    { prop: "pointer", type: "number", default: "12", description: "Largest pointer shift in px. 0 turns it off." },
+    { prop: "pointerArea", type: '"window" | "element"', default: '"window"', description: "What the pointer position is measured against." },
+    { prop: "scroll", type: "number", default: "40", description: "Vertical drift in px across the viewport. 0 turns it off." },
+    { prop: "corners", type: "boolean", default: "true", description: "Draw the four viewfinder corners." },
+    { prop: "caption", type: "ReactNode", default: "—", description: "Bar at the bottom over the image." },
+    { prop: "aspectRatio", type: "string | null", default: '"4 / 5"', description: "CSS aspect-ratio of the frame. null lets className size it." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Move even under reduced motion. Only use it behind an explicit action." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the frame." },
+  ]}
+/>
+
+## Accessibility
+
+- Give the image a real `alt`, or `""` if it is decorative. The corners are hidden from screen readers; the caption is read as text.
+- Under `prefers-reduced-motion: reduce` both layers stop and the image sits still at its normal size.
+- Touch screens never get the pointer layer. The pointer layer stops its animation frame loop once it has caught up, so a still mouse costs nothing.

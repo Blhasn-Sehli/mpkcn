@@ -241,4 +241,103 @@ export const demos: Record<string, ComponentType<DemoProps>> = {
     }),
     { loading: DemoLoading },
   ),
+  "arch-diagram": dynamic<DemoProps>(
+    () => import("./arch-diagram-demo").then(({ ArchDiagramDemo }) => {
+      function ArchDiagramGalleryDemo({ compact }: DemoProps) {
+        return <ArchDiagramDemo compact={compact} />;
+      }
+      return ArchDiagramGalleryDemo;
+    }),
+    { loading: DemoLoading },
+  ),
+  "case-card": dynamic<DemoProps>(
+    () => import("./case-card-demo").then(({ CaseCardDemo }) => {
+      function CaseCardGalleryDemo({ compact }: DemoProps) {
+        return <CaseCardDemo compact={compact} />;
+      }
+      return CaseCardGalleryDemo;
+    }),
+    { loading: DemoLoading },
+  ),
+  "env-card": dynamic<DemoProps>(
+    () => import("./env-card-demo").then(({ EnvCardDemo }) => {
+      function EnvCardGalleryDemo({ compact }: DemoProps) {
+        return <EnvCardDemo compact={compact} />;
+      }
+      return EnvCardGalleryDemo;
+    }),
+    { loading: DemoLoading },
+  ),
+  "fetch-card": dynamic<DemoProps>(
+    () => import("./fetch-card-demo").then(({ FetchCardDemo }) => {
+      function FetchCardGalleryDemo({ compact }: DemoProps) {
+        return <FetchCardDemo compact={compact} />;
+      }
+      return FetchCardGalleryDemo;
+    }),
+    { loading: DemoLoading },
+  ),
+  "file-explorer": dynamic<DemoProps>(
+    () => import("./file-explorer-demo").then(({ FileExplorerDemo }) => {
+      function FileExplorerGalleryDemo({ compact }: DemoProps) {
+        return <FileExplorerDemo compact={compact} />;
+      }
+      return FileExplorerGalleryDemo;
+    }),
+    { loading: DemoLoading },
+  ),
+  "media-lightbox": dynamic<DemoProps>(
+    () => import("./media-lightbox-demo").then(({ MediaLightboxDemo }) => {
+      function MediaLightboxGalleryDemo({ compact }: DemoProps) {
+        return <MediaLightboxDemo compact={compact} />;
+      }
+      return MediaLightboxGalleryDemo;
+    }),
+    { loading: DemoLoading },
+  ),
+  "parallax-image": dynamic<DemoProps>(
+    () => import("./parallax-image-demo").then(({ ParallaxImageDemo }) => {
+      function ParallaxImageGalleryDemo({ compact }: DemoProps) {
+        return <ParallaxImageDemo compact={compact} />;
+      }
+      return ParallaxImageGalleryDemo;
+    }),
+    { loading: DemoLoading },
+  ),
+  "prompt-footer": dynamic<DemoProps>(
+    () => import("./prompt-footer-demo").then(({ PromptFooterDemo }) => {
+      function PromptFooterGalleryDemo({ compact }: DemoProps) {
+        return <PromptFooterDemo compact={compact} />;
+      }
+      return PromptFooterGalleryDemo;
+    }),
+    { loading: DemoLoading },
+  ),
+  "scroll-hint": dynamic<DemoProps>(
+    () => import("./scroll-hint-demo").then(({ ScrollHintDemo }) => {
+      function ScrollHintGalleryDemo({ compact }: DemoProps) {
+        return <ScrollHintDemo compact={compact} />;
+      }
+      return ScrollHintGalleryDemo;
+    }),
+    { loading: DemoLoading },
+  ),
+  "site-header": dynamic<DemoProps>(
+    () => import("./site-header-demo").then(({ SiteHeaderDemo }) => {
+      function SiteHeaderGalleryDemo({ compact }: DemoProps) {
+        return <SiteHeaderDemo compact={compact} />;
+      }
+      return SiteHeaderGalleryDemo;
+    }),
+    { loading: DemoLoading },
+  ),
+  "tech-stack": dynamic<DemoProps>(
+    () => import("./tech-stack-demo").then(({ TechStackDemo }) => {
+      function TechStackGalleryDemo({ compact }: DemoProps) {
+        return <TechStackDemo compact={compact} />;
+      }
+      return TechStackGalleryDemo;
+    }),
+    { loading: DemoLoading },
+  ),
 };

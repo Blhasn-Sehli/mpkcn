@@ -50,31 +50,35 @@ const features: { flag: string; title: string; body: string }[] = [
 ];
 
 function TerminalWindow() {
-  // Real output of `mpkcn add boot-screen` (CLI 0.2.0) in a fresh Next.js app.
-  const created = (k: number, file: string) => (
+  // Real output of `mpkcn add theme-toggle` (CLI 0.3.0) in a fresh create-next-app project, npm log trimmed.
+  const file = (k: number, word: string, dir: string, name: string, note?: string) => (
     <Fragment key={k}>
-      <span className="text-mpk-blue">{"  created     "}</span>src/components/mpkcn/<span className="text-mpk-ink">{file}</span>
+      <span className="text-mpk-blue">{`  ${word.padEnd(11)} `}</span>
+      {dir}
+      <span className="text-mpk-ink">{name}</span>
+      {note && <span className="text-mpk-dim2">{`  ${note}`}</span>}
     </Fragment>
   );
   const lines: ReactNode[] = [
     <Fragment key={0}>
-      <span className="text-mpk-amber">$</span> <span className="text-mpk-ink">npx mpkcn add boot-screen</span>
+      <span className="text-mpk-amber">$</span> <span className="text-mpk-ink">npx mpkcn add theme-toggle</span>
     </Fragment>,
-    <span key={1} className="text-mpk-dim">Adding boot-screen (+ theme)</span>,
-    created(6, "mpkcn-theme.css"),
-    created(7, "boot-screen.tsx"),
-    created(8, "lib/matrix-rain.ts"),
-    <Fragment key={9}>
-      <span className="text-mpk-blue">{"  updated     "}</span>src/app/<span className="text-mpk-ink">globals.css</span>
-      <span className="text-mpk-dim2">{'  (+ @import "../components/mpkcn/mpkcn-theme.css";)'}</span>
+    <span key={1} className="text-mpk-dim">Adding theme-toggle (+ theme, theme-provider)</span>,
+    file(2, "created", "src/components/mpkcn/", "mpkcn-theme.css"),
+    file(3, "created", "src/components/mpkcn/", "theme-provider.tsx"),
+    file(4, "created", "src/components/mpkcn/", "theme-toggle.tsx"),
+    file(5, "updated", "src/app/", "globals.css", '(+ @import "../components/mpkcn/mpkcn-theme.css";)'),
+    file(6, "updated", "src/app/", "layout.tsx", "(+ fonts, theme provider)"),
+    <span key={7} className="text-mpk-dim2">&nbsp;</span>,
+    <span key={8} className="text-mpk-dim">Installing dependencies</span>,
+    <span key={9}>{"  "}npm install next-themes</span>,
+    <span key={10} className="text-mpk-dim2">&nbsp;</span>,
+    <span key={11} className="text-mpk-dim">Done. Use it:</span>,
+    <Fragment key={12}>
+      <span className="text-mpk-ink">{"  "}import</span> {"{ ThemeToggle }"} <span className="text-mpk-ink">from</span>{" "}
+      <span className="text-mpk-amber">&quot;@/components/mpkcn/theme-toggle&quot;</span>;
     </Fragment>,
-    <span key={2} className="text-mpk-dim2">&nbsp;</span>,
-    <span key={3} className="text-mpk-dim">Done. Use it:</span>,
-    <Fragment key={4}>
-      <span className="text-mpk-ink">{"  "}import</span> {"{ BootScreen }"} <span className="text-mpk-ink">from</span>{" "}
-      <span className="text-mpk-amber">&quot;@/components/mpkcn/boot-screen&quot;</span>;
-    </Fragment>,
-    <Fragment key={5}>
+    <Fragment key={13}>
       <span className="text-mpk-amber">$</span>{" "}
       <span aria-hidden="true" className="inline-block h-[1.05em] w-[0.55em] translate-y-[2px] animate-mpk-blink bg-mpk-ink" />
     </Fragment>,
@@ -141,13 +145,13 @@ export default function Home() {
                 className="inline-flex items-center gap-2 border border-mpk-line bg-mpk-bg px-2.5 py-1 font-mpk-mono text-[11px] text-mpk-dim transition-colors hover:border-mpk-amber hover:text-mpk-ink"
               >
                 <span className="size-1.5 bg-mpk-amber" aria-hidden="true" />
-                v{siteConfig.version} · one-command setup
+                v{siteConfig.version} · no manual setup
               </Link>
               <h1 className="mt-6 text-[2.5rem] leading-[1.04] font-semibold tracking-[-0.03em] text-mpk-ink sm:text-6xl lg:text-[4.25rem]">
                 Terminal-style components you <span className="text-mpk-amber">copy</span>, paste and own.
               </h1>
               <p className="mt-6 max-w-xl text-base leading-7 text-mpk-dim sm:text-lg sm:leading-8">
-                24 components for React and Tailwind 4: boot screens, terminal windows, a command palette, tmux bars and quiet effects. Square corners, hairline
+                35 components for React and Tailwind 4: boot screens, terminal windows, a command palette, file explorers, tmux bars and quiet effects. Square corners, hairline
                 borders, amber and blue. Copied into your project with one command.
               </p>
 
@@ -185,7 +189,7 @@ export default function Home() {
           <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="font-mpk-mono text-xs text-mpk-amber">$ mpkcn list</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-mpk-ink sm:text-4xl">A few of the 24, live.</h2>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-mpk-ink sm:text-4xl">A few of the 35, live.</h2>
             </div>
             <div className="flex max-w-md flex-col items-start gap-3 sm:items-end sm:text-right">
               <p className="text-sm leading-6 text-mpk-dim">

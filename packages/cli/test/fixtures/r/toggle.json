@@ -1,0 +1,2 @@
+{ "name": "toggle", "title": "Toggle", "description": "Uses useTheme, so it needs the provider.", "dependencies": ["next-themes"], "registryDependencies": ["theme", "theme-provider"],
+  "files": [{ "target": "toggle.tsx", "content": "export function Toggle() { return null; }\n" }] }

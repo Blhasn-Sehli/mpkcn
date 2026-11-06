@@ -33,3 +33,6 @@ export const registry: RegistryItem[] = data;
 export function getRegistryItem(name: string): RegistryItem | undefined {
   return registry.find((item) => item.name === name);
 }
+
+/** Setup items the CLI installs on its own; they are not shown as components. */
+export const SETUP_ITEMS: ReadonlySet<string> = new Set(["theme", "theme-provider"]);

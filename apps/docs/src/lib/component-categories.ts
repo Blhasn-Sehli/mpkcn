@@ -1,5 +1,5 @@
 /** Gallery categories, in the order the filter chips show them. */
-export const COMPONENT_CATEGORIES = ["Intro & loaders", "Terminal", "Effects", "Text & layout", "Theme"] as const;
+export const COMPONENT_CATEGORIES = ["Intro & loaders", "Terminal", "Navigation", "Cards", "Media", "Effects", "Text & layout", "Theme"] as const;
 
 export type KnownCategory = (typeof COMPONENT_CATEGORIES)[number];
 
@@ -8,6 +8,17 @@ export type ComponentCategory = KnownCategory | "Other";
 
 /** Category of each registry component, by its install name. */
 export const componentCategories: Record<string, KnownCategory> = {
+  "site-header": "Navigation",
+  "prompt-footer": "Navigation",
+  "file-explorer": "Navigation",
+  "scroll-hint": "Navigation",
+  "media-lightbox": "Media",
+  "parallax-image": "Media",
+  "case-card": "Cards",
+  "tech-stack": "Cards",
+  "arch-diagram": "Cards",
+  "fetch-card": "Terminal",
+  "env-card": "Terminal",
   "boot-screen": "Intro & loaders",
   "theme-toggle": "Theme",
   reveal: "Effects",

@@ -1,0 +1,88 @@
+import { FetchCardDemo } from "@/components/demos/fetch-card-demo";
+
+<ComponentPreview name="fetch-card">
+  <FetchCardDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="fetch-card" />
+
+## Usage
+
+Pass ASCII art and the rows. The header reads `user@host`.
+
+```tsx
+import { FetchCard } from "@/components/mpkcn/fetch-card";
+
+const ART = `
+  /\\_/\\
+ ( o.o )
+  > ^ <`;
+
+export function About() {
+  return (
+    <FetchCard
+      art={ART}
+      artLabel="A cat"
+      user="you"
+      host="portfolio"
+      rows={[
+        { label: "role", value: "full-stack developer" },
+        { label: "stack", value: "Next.js · React · TypeScript" },
+        { label: "loc", value: "Earth" },
+      ]}
+    />
+  );
+}
+```
+
+A string `art` is split into lines that slide in one after another. Leading and trailing blank lines are trimmed, so you can start the template literal on a new line. Set its size with `artClassName` (block-letter logos usually need `text-[9px]` to `text-[11px]`).
+
+Any other node works as art too: an `<img>`, an SVG, an `AsciiImage`.
+
+## Examples
+
+### Amber, without the palette
+
+<ComponentPreview
+  name="fetch-card"
+  code={`<FetchCard art={ART} tone="amber" palette={false} rows={rows} />`}
+>
+  <FetchCardDemo tone="amber" compact />
+</ComponentPreview>
+
+### Your own header
+
+`title` replaces the `user@host` line, for a name or a link.
+
+```tsx
+<FetchCard title={<a href="/about">read more</a>} rows={rows} art={ART} />
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "art", type: "ReactNode", default: "—", description: "ASCII art on the left. A string is split into lines." },
+    { prop: "artLabel", type: "string", default: "—", description: "Accessible name for the art. Without it the art is hidden from screen readers." },
+    { prop: "user", type: "string", default: '"guest"', description: "User part of the header." },
+    { prop: "host", type: "string", default: '"localhost"', description: "Host part of the header." },
+    { prop: "title", type: "ReactNode", default: "—", description: "Replaces the user@host header." },
+    { prop: "rows", type: "{ label: string; value: ReactNode }[]", default: "—", description: "Key / value rows under the header." },
+    { prop: "palette", type: "boolean", default: "true", description: "Show the strip of theme color swatches." },
+    { prop: "tone", type: '"blue" | "amber"', default: '"blue"', description: "Accent of the art and header." },
+    { prop: "animate", type: "boolean", default: "true", description: "Slide the lines in when the card scrolls into view." },
+    { prop: "tilt", type: "boolean", default: "true", description: "Tilt the art in 3D towards a mouse pointer." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Animate even under reduced motion. Only use it behind an explicit action." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the root." },
+    { prop: "artClassName", type: "string", default: '"text-[11px]"', description: "Classes for the art (font size, line height). Replaces the default size." },
+  ]}
+/>
+
+## Accessibility
+
+- The rows are a description list, so each label is tied to its value.
+- ASCII art is noise to a screen reader: it is hidden unless you give it an `artLabel`, which turns it into an image with that name.
+- The palette strip and the rule under the header are decorative and hidden.
+- Under `prefers-reduced-motion: reduce` nothing slides and the art does not tilt. Touch input never tilts it.

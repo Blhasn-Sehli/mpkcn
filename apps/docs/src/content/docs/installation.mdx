@@ -18,112 +18,104 @@ The components are plain React client components. Next.js is the reference setup
 
 ## Quick start
 
-Two commands, run from your project root.
-
-<Steps>
-
-### Set up the project
+Run one command from your project root. That is the whole setup:
 
 ```bash
-npx mpkcn init
+npx mpkcn add theme-toggle
 ```
 
-`init` writes `mpkcn-theme.css` to your components folder, adds its `@import` to your global CSS right after `@import "tailwindcss"`, and checks your `package.json` for React 19, Tailwind 4 and next-themes:
-
 ```txt
-Setting up mpkcn
+Adding theme-toggle (+ theme, theme-provider)
   created     src/components/mpkcn/mpkcn-theme.css
+  created     src/components/mpkcn/theme-provider.tsx
+  created     src/components/mpkcn/theme-toggle.tsx
   updated     src/app/globals.css  (+ @import "../components/mpkcn/mpkcn-theme.css";)
+  updated     src/app/layout.tsx  (+ fonts, theme provider)
 
-Checks
-  ok    react ^19.3.0
-  ok    tailwindcss ^4.1.0
-  ok    next-themes ^0.4.6
-
-Ready. Add a component: npx mpkcn add boot-screen  (all of them: npx mpkcn list)
-```
-
-If something is missing, `init` prints a `warn` line with the command that fixes it. It finds the global CSS at the usual Next.js and Vite paths (`src/app/globals.css`, `app/globals.css`, `src/index.css`, `src/styles/globals.css`, …) or in any CSS file that imports Tailwind. Use `--css <path>` to pick the file yourself.
-
-### Add a component
-
-```bash
-npx mpkcn add boot-screen
-```
-
-`add` writes the component files, installs its npm packages with your package manager (npm, pnpm, yarn or bun, from your lockfile), and ends with the import to paste:
-
-```txt
-Adding boot-screen
-  created     src/components/mpkcn/boot-screen.tsx
-  created     src/components/mpkcn/lib/matrix-rain.ts
+Installing dependencies
+  npm install next-themes
 
 Done. Use it:
-  import { BootScreen } from "@/components/mpkcn/boot-screen";
+  import { ThemeToggle } from "@/components/mpkcn/theme-toggle";
 ```
 
-You can skip `init`: the first `add` does the same setup on its own.
+In a Next.js app, that one command:
 
-</Steps>
+- writes the component, the theme (`mpkcn-theme.css`) and the theme provider to `src/components/mpkcn` (or `components/mpkcn` without `src/`);
+- imports the theme in your global CSS, right after `@import "tailwindcss"`;
+- loads **Space Grotesk** and **JetBrains Mono** with `next/font` in your root layout;
+- wraps your app in the theme provider and adds `suppressHydrationWarning` to `<html>`;
+- installs `next-themes` with your package manager (npm, pnpm, yarn or bun, from your lockfile).
 
-## Theme provider
+Paste the import line where you need the component, and you are done. Any other component works the same way: `npx mpkcn add boot-screen`. Run it again as often as you like: nothing is added twice.
 
-mpkcn switches themes with a `dark` / `light` class on `<html>`, set by `next-themes`. This is the one step the CLI leaves to you, because it touches your layout. Create a client provider:
+<Callout>
+  Prefer to set up before adding anything? `npx mpkcn init` does the same setup without a component, and checks React 19, Tailwind 4, next-themes, the theme provider and the fonts.
+</Callout>
 
-```tsx
-"use client";
+### What changes in your layout
 
-import { ThemeProvider } from "next-themes";
-
-export function Providers({ children }: { children: React.ReactNode }) {
-  return (
-    <ThemeProvider attribute="class" defaultTheme="dark" themes={["dark", "light"]} disableTransitionOnChange>
-      {children}
-    </ThemeProvider>
-  );
-}
-```
-
-Then use it in your root layout. `suppressHydrationWarning` is needed because `next-themes` sets the class before React hydrates:
+For the `src/app/layout.tsx` that `create-next-app` generates, the CLI adds the two fonts next to Geist, their CSS variables on `<html>`, and the provider around `{children}`:
 
 ```tsx
-import { Providers } from "./providers";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { MpkcnThemeProvider } from "@/components/mpkcn/theme-provider";
 import "./globals.css";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+// geistSans, geistMono: unchanged
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+});
+
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="bg-mpk-bg text-mpk-ink">
-        <Providers>{children}</Providers>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-full flex flex-col">
+        <MpkcnThemeProvider>{children}</MpkcnThemeProvider>
       </body>
     </html>
   );
 }
 ```
 
-## Load the fonts (optional)
+The theme's `font-mpk-sans` and `font-mpk-mono` read those variables first, then fall back to the font names and system fonts.
 
-The tokens ask for **Space Grotesk** and **JetBrains Mono** and fall back to system fonts. With `next/font`, load both and point the token stacks at them:
+### When the CLI leaves your layout alone
 
-```tsx
-import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
+The CLI edits the layout only when it has the simple shape above. It never touches a layout that already has a `ThemeProvider` from `next-themes`, or already loads the fonts. If your layout is different (more content in `<body>`, a `className` built with `cn(…)`, no `app/layout.tsx`), nothing is written and the CLI prints the exact lines to paste instead:
 
-const sans = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" });
-const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono" });
-
-// <html className={`${sans.variable} ${mono.variable}`}>
+```txt
+src/app/layout.tsx has an unusual shape, so it was left as is. Add the theme provider to it:
+  import { MpkcnThemeProvider } from "@/components/mpkcn/theme-provider";
+  <html lang="en" suppressHydrationWarning>
+  <body><MpkcnThemeProvider>{children}</MpkcnThemeProvider></body>
 ```
 
+Pass `--no-layout` to never edit the layout, or `--no-fonts` to skip the fonts.
+
+### Other frameworks
+
+Without Next.js (Vite, React Router, …) the CLI does not edit your app code. It prints where to put the provider and one Google Fonts line for the top of your global CSS:
+
 ```css
-@theme inline {
-  --font-mpk-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-mpk-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
-}
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&family=Space+Grotesk:wght@400..700&display=swap");
 ```
 
 ## Manual setup
 
-Use this if you prefer to do each step yourself, or if the CLI cannot find your files.
+Use this if you prefer to do each step yourself.
 
 <Steps>
 
@@ -134,14 +126,6 @@ Skip this if you already have one. `create-next-app` sets up Tailwind 4 for you.
 ```bash
 npx create-next-app@latest my-app --typescript --tailwind --app --src-dir
 ```
-
-### Install next-themes
-
-```bash
-npm i next-themes
-```
-
-Then add the [theme provider](#theme-provider) above.
 
 ### Add the theme file
 
@@ -156,6 +140,60 @@ Import it in your global CSS, right after Tailwind (the path is relative to the 
 
 This gives you utilities like `bg-mpk-bg`, `text-mpk-ink`, `border-mpk-line`, `text-mpk-amber`, `font-mpk-mono` and `animate-mpk-blink`.
 
+### Add the theme provider
+
+mpkcn switches themes with a `dark` / `light` class on `<html>`, set by `next-themes`. Install it:
+
+```bash
+npm i next-themes
+```
+
+Save this as `src/components/mpkcn/theme-provider.tsx`:
+
+```tsx
+"use client";
+
+import { ThemeProvider, type ThemeProviderProps } from "next-themes";
+
+export function MpkcnThemeProvider({ children, ...props }: ThemeProviderProps) {
+  return (
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem={false}
+      themes={["dark", "light"]}
+      disableTransitionOnChange
+      {...props}
+    >
+      {children}
+    </ThemeProvider>
+  );
+}
+```
+
+### Load the fonts and use the provider
+
+In your root layout (`src/app/layout.tsx`), load both fonts with `next/font`, put their variables on `<html>`, and wrap `{children}` in the provider. `suppressHydrationWarning` is needed because `next-themes` sets the class before React hydrates:
+
+```tsx
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { MpkcnThemeProvider } from "@/components/mpkcn/theme-provider";
+import "./globals.css";
+
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" });
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono" });
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+      <body className="bg-mpk-bg text-mpk-ink">
+        <MpkcnThemeProvider>{children}</MpkcnThemeProvider>
+      </body>
+    </html>
+  );
+}
+```
+
 ### Add a component
 
 Every component page has a **Manual** tab with the source and its npm packages. Copy the files into your components folder, install the packages, then import it:
@@ -168,4 +206,4 @@ import { BootScreen } from "@/components/mpkcn/boot-screen";
 
 ## What the CLI does
 
-`mpkcn add` downloads the component from the registry at `https://blhasn-sehli.github.io/mpkcn/r` and writes the source files, skipping files that already exist. On the first run it also writes the theme and adds the theme `@import` to your global CSS, once. It then installs the npm packages your `package.json` does not list yet, with your package manager. Pass `--no-install` to only print the install command. See [CLI](/docs/cli/) for every option.
+`mpkcn add` downloads the component from the registry at `https://blhasn-sehli.github.io/mpkcn/r` and writes the source files, skipping files that already exist. On the first run it also writes the theme and adds the theme `@import` to your global CSS, once. In a Next.js app it loads the fonts in your root layout and, for components that need it (such as `theme-toggle`), adds the theme provider. It then installs the npm packages your `package.json` does not list yet, with your package manager. Pass `--no-install` to only print the install command. See [CLI](/docs/cli/) for every option.

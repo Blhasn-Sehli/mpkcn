@@ -1,0 +1,84 @@
+import { TechStackDemo } from "@/components/demos/tech-stack-demo";
+
+<ComponentPreview name="tech-stack">
+  <TechStackDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="tech-stack" />
+
+## Usage
+
+Pass your categories. Each item has a `name`, an optional `icon` and optional `details`, which the side panel prints like `jq` would.
+
+```tsx
+import { TechStack } from "@/components/mpkcn/tech-stack";
+
+export function Stack() {
+  return (
+    <TechStack
+      groups={[
+        {
+          label: "frontend",
+          items: [
+            { name: "React", icon: <ReactLogo />, details: { since: 2021, used_in: ["web app"] } },
+            { name: "Next.js", details: { router: "app" } },
+          ],
+        },
+        { label: "backend", items: [{ name: "Node.js" }, { name: "PostgreSQL" }] },
+      ]}
+    />
+  );
+}
+```
+
+No icon set ships with the component: pass whatever you use (an SVG component, an `<img>`, a letter). Icons are sized to the chip and hidden from screen readers, since the name is always written next to them.
+
+Detail values are JSON-like: strings print in quotes, numbers and booleans in amber, and string arrays as a list. The item's category is always printed first as `"group"`.
+
+## Examples
+
+### Grid
+
+`variant="grid"` drops the JSON punctuation and shows a heading and a chip grid per category.
+
+<ComponentPreview
+  name="tech-stack"
+  code={`<TechStack variant="grid" groups={groups} />`}
+>
+  <TechStackDemo variant="grid" />
+</ComponentPreview>
+
+### Without the detail panel
+
+`detail={false}` keeps only the list. Chips are still buttons, so use `onSelect` if picking one should do something else, like filtering your projects.
+
+```tsx
+<TechStack groups={groups} detail={false} onSelect={(item) => setFilter(item.name)} />
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "groups", type: "{ label: string; items: TechItem[] }[]", default: "—", description: "Categories, top to bottom." },
+    { prop: "variant", type: '"json" | "grid"', default: '"json"', description: "A stack.json file, or a heading and a chip grid per category." },
+    { prop: "command", type: "string | null", default: '"cat ./stack.json"', description: "Command shown above the stack. null hides it." },
+    { prop: "detail", type: "boolean", default: "true", description: "Show the jq-style detail panel for the picked item." },
+    { prop: "defaultSelected", type: "string", default: "first item", description: "Name of the item picked at first." },
+    { prop: "onSelect", type: "(item, group) => void", default: "—", description: "Called when an item is picked." },
+    { prop: "animate", type: "boolean", default: "true", description: "Stagger the chips in when the stack scrolls into view." },
+    { prop: "ignoreReducedMotion", type: "boolean", default: "false", description: "Animate even under reduced motion. Only use it behind an explicit action." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the root." },
+  ]}
+/>
+
+`TechItem` is `{ name: string; icon?: ReactNode; details?: Record<string, string | number | boolean | string[]> }`. Names must be unique across the whole stack.
+
+## Accessibility
+
+- Every chip is a real `button` with `aria-pressed`, inside a group labelled with its category. Click, Enter or Space picks it; hovering with a mouse only previews it.
+- The detail panel is an `aria-live="polite"` region, so the picked item's details are read out, and each key is tied to its value in a description list.
+- Icons are decorative and hidden. Under `prefers-reduced-motion: reduce` the chips and the panel appear without sliding.
+- The panel sits next to the list only when the component is wide enough (a container query), so it works in narrow columns too.

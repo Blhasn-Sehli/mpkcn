@@ -5,3 +5,5 @@ dist
 *.tsbuildinfo
 .env*
 apps/docs/public/r
+apps/docs/public/llms.txt
+apps/docs/public/llms-full.txt

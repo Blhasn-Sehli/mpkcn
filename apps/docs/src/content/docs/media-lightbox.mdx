@@ -1,0 +1,94 @@
+import { MediaLightboxDemo } from "@/components/demos/media-lightbox-demo";
+
+<ComponentPreview name="media-lightbox">
+  <MediaLightboxDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="media-lightbox" />
+
+## Usage
+
+You own the open state and the thumbnails; the lightbox only shows the items. Set `startIndex` to the one that was clicked.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import { MediaLightbox } from "@/components/mpkcn/media-lightbox";
+
+const shots = [
+  { src: "/shots/home.png", alt: "Home screen", caption: "home" },
+  { src: "/shots/demo.mp4", type: "video" as const, poster: "/shots/demo.png", caption: "demo" },
+];
+
+export function Gallery() {
+  const [open, setOpen] = useState(false);
+  const [start, setStart] = useState(0);
+  return (
+    <>
+      {shots.map((s, i) => (
+        <button key={s.src} onClick={() => { setStart(i); setOpen(true); }}>
+          open {s.caption}
+        </button>
+      ))}
+      <MediaLightbox items={shots} open={open} onOpenChange={setOpen} startIndex={start} title="Screenshots" />
+    </>
+  );
+}
+```
+
+By default it is a fullscreen overlay rendered into `document.body`, and the page behind it stops scrolling.
+
+## Examples
+
+### Inside a box
+
+`portal={false}` fills the nearest positioned parent instead of the screen (give the parent `position: relative`). That is how the preview above works. `onIndexChange` keeps the gallery behind it in sync: the outlined thumbnail is the last one you looked at.
+
+<ComponentPreview
+  name="media-lightbox"
+  code={`<div className="relative h-[420px]">
+  <MediaLightbox items={items} open={open} onOpenChange={setOpen} portal={false} />
+</div>`}
+>
+  <MediaLightboxDemo compact />
+</ComponentPreview>
+
+### No loop, no zoom
+
+`loop={false}` stops at both ends (the arrows turn off), `zoom={false}` keeps images at their fitted size and `thumbnails={false}` hides the strip.
+
+<ComponentPreview
+  name="media-lightbox"
+  code={`<MediaLightbox items={items} open={open} onOpenChange={setOpen} loop={false} zoom={false} thumbnails={false} />`}
+>
+  <MediaLightboxDemo loop={false} zoom={false} thumbnails={false} />
+</ComponentPreview>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "items", type: "{ src; type?; alt?; poster?; caption? }[]", default: "—", description: "Images and videos, in order." },
+    { prop: "open", type: "boolean", default: "—", description: "Whether the lightbox is shown." },
+    { prop: "onOpenChange", type: "(open: boolean) => void", default: "—", description: "Called when it wants to close (Esc, ✕, backdrop click)." },
+    { prop: "startIndex", type: "number", default: "0", description: "Item shown first each time it opens." },
+    { prop: "onIndexChange", type: "(index: number) => void", default: "—", description: "Called whenever the shown item changes." },
+    { prop: "title", type: "string", default: '"Media"', description: "Top-bar title and accessible name of the dialog." },
+    { prop: "loop", type: "boolean", default: "true", description: "Wrap from the last item to the first and back." },
+    { prop: "thumbnails", type: "boolean", default: "true", description: "Strip of thumbnails at the bottom." },
+    { prop: "zoom", type: "boolean", default: "true", description: "Click an image to zoom 2× on that spot." },
+    { prop: "portal", type: "boolean", default: "true", description: "Fullscreen in document.body; false fills the positioned parent." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the dialog." },
+  ]}
+/>
+
+## Accessibility
+
+- It is a `role="dialog"` with `aria-modal`, named by its title. Opening it focuses the close button; Tab and Shift+Tab stay inside it; closing puts focus back on the element that opened it.
+- ← → move, Home and End jump to the ends, Esc closes. While a video has focus, the arrow keys go to the video's own controls.
+- Every button has a label ("Previous", "Next", "Close", and each thumbnail's alt text); the current thumbnail has `aria-current`. A polite live region reads out the item and its position, e.g. "Mountains at dusk, 4 of 4".
+- Images use `alt`, then `caption`, then "Image n". Videos never autoplay.
+- Zoom and the thumbnail scroll are instant under `prefers-reduced-motion`.

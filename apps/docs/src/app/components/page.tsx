@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { categoryRank, getComponentCategory, type ComponentCategory } from "@/lib/component-categories";
 import { highlight } from "@/lib/highlight";
 import { readRegistryFile } from "@/lib/registry-source";
-import { registry } from "@/registry";
+import { registry, SETUP_ITEMS } from "@/registry";
 
 const description =
   "Every mpkcn component, running live. Preview them, read the source, and copy the one you want with a single command.";
@@ -18,9 +18,9 @@ export const metadata: Metadata = {
   openGraph: { title: "Components — mpkcn", description, url: "components/" },
 };
 
-/** Registry items (minus the theme), with every file read and highlighted at build time. */
+/** Registry items (minus the setup items), with every file read and highlighted at build time. */
 async function getGalleryItems(): Promise<GalleryItem[]> {
-  const components = registry.filter((item) => item.name !== "theme");
+  const components = registry.filter((item) => !SETUP_ITEMS.has(item.name));
   const items = await Promise.all(
     components.map(async (item) => ({
       name: item.name,

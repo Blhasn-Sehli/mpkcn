@@ -1,0 +1,2 @@
+{ "name": "theme-provider", "title": "Theme Provider", "description": "next-themes with the mpkcn defaults.", "dependencies": ["next-themes"], "registryDependencies": ["theme"],
+  "files": [{ "target": "theme-provider.tsx", "content": "\"use client\";\nexport function MpkcnThemeProvider() { return null; }\n" }] }

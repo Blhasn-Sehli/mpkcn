@@ -1,0 +1,70 @@
+import { ArchDiagramDemo } from "@/components/demos/arch-diagram-demo";
+
+<ComponentPreview name="arch-diagram">
+  <ArchDiagramDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="arch-diagram" />
+
+## Usage
+
+Place boxes on a grid with `col` and `row`, then join them with `links`.
+
+```tsx
+import { ArchDiagram } from "@/components/mpkcn/arch-diagram";
+
+export function Architecture() {
+  return (
+    <ArchDiagram
+      nodes={[
+        { id: "web", label: "Web", col: 0, row: 0, tags: ["Next.js"] },
+        { id: "api", label: "API", col: 1, row: 0, tags: ["Node.js"], note: "versioned REST routes" },
+        { id: "db", label: "Data", col: 2, row: 0, tags: ["PostgreSQL"] },
+        { id: "jobs", label: "Jobs", col: 1, row: 1, tags: ["Redis"] },
+      ]}
+      links={[["web", "api"], ["api", "db"], ["api", "jobs"]]}
+      defaultActive="api"
+    />
+  );
+}
+```
+
+Boxes on the same row join with a straight line; others get a right-angled line from the bottom of the upper box to the top of the lower one. The picked box and its links turn blue, and its `tags` and `note` print under the diagram.
+
+The diagram is an SVG that scales to its width. Keep labels short (about 12 characters) and stick to three or four columns so the text stays readable on phones.
+
+## Examples
+
+### Small
+
+<ComponentPreview
+  name="arch-diagram"
+  code={`<ArchDiagram nodes={nodes.slice(0, 3)} links={links.slice(0, 2)} command={null} />`}
+>
+  <ArchDiagramDemo compact />
+</ComponentPreview>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "nodes", type: "ArchNode[]", default: "—", description: "Boxes, placed on a grid by col and row." },
+    { prop: "links", type: "[string, string][]", default: "[]", description: "Connections as [fromId, toId] pairs." },
+    { prop: "defaultActive", type: "string", default: "first node", description: "Id of the box picked at first." },
+    { prop: "onSelect", type: "(node: ArchNode) => void", default: "—", description: "Called when a box is picked." },
+    { prop: "command", type: "string | null", default: '"tree . --arch"', description: "Command shown above the diagram. null hides it." },
+    { prop: "label", type: "string", default: '"Architecture diagram"', description: "Accessible name of the diagram." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the root." },
+  ]}
+/>
+
+`ArchNode` is `{ id: string; label: string; col: number; row: number; tags?: string[]; note?: ReactNode }`.
+
+## Accessibility
+
+- Each box is focusable with `role="button"` and `aria-pressed`. Enter or Space picks it; the arrow keys move focus to the nearest box in that direction.
+- The details line is a polite live region and describes the picked box, so screen readers hear it on selection and on focus.
+- The lines are decorative. Everything a line says (which boxes connect) should also be in your text if it matters.
+- Nothing animates beyond color changes, so there is nothing to turn off for reduced motion.

@@ -22,12 +22,14 @@ Stack: pnpm workspace. `apps/docs` = Next.js 16.4 (App Router, Tailwind 4, React
   --color-mpk-bg: var(--mpk-bg); --color-mpk-bg-soft: var(--mpk-bg-soft); --color-mpk-line: var(--mpk-line);
   --color-mpk-ink: var(--mpk-ink); --color-mpk-dim: var(--mpk-dim); --color-mpk-dim2: var(--mpk-dim2);
   --color-mpk-amber: var(--mpk-amber); --color-mpk-blue: var(--mpk-blue);
-  --font-mpk-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
-  --font-mpk-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mpk-mono: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, Consolas, monospace;
+  --font-mpk-sans: var(--font-space-grotesk, "Space Grotesk"), ui-sans-serif, system-ui, sans-serif;
   --animate-mpk-blink: mpk-blink 1s steps(1) infinite;
 }
 @keyframes mpk-blink { 50% { opacity: 0; } }
 ```
+
+The font stacks read `--font-jetbrains-mono` / `--font-space-grotesk` first: `next/font` sets them on `<html>` (the CLI wires this into the root layout). Without them, the stacks fall back to the font names (loaded by a Google Fonts `@import`) and then to system fonts.
 
 Components style themselves with Tailwind classes built on these tokens only (`bg-mpk-bg`, `text-mpk-ink`, `border-mpk-line`, `text-mpk-blue`, `font-mpk-mono`, `animate-mpk-blink`, …). No hard-coded colors, no box shadows. Dark mode is next-themes with `attribute="class"` (`.dark` / `.light` on `<html>`).
 
@@ -50,8 +52,11 @@ type BootScreenProps = {
 ```
 Helper `registry/lib/matrix-rain.ts` (`startMatrixRain(canvas): () => void`, sizes to the canvas's parent, color from `--mpk-blue`).
 
+### `theme-provider.tsx` → `MpkcnThemeProvider`
+next-themes `ThemeProvider` with the mpkcn defaults: `attribute="class"`, `defaultTheme="dark"`, `enableSystem={false}`, `themes={["dark", "light"]}`, `disableTransitionOnChange`; any prop overrides a default. A setup item (not shown in the gallery): every component that calls `useTheme` lists it in `registryDependencies`.
+
 ### `theme-toggle.tsx` → `ThemeToggle`
-Uses `useTheme` from `next-themes`; avoids a hydration flash.
+Uses `useTheme` from `next-themes`; avoids a hydration flash. `registryDependencies: ["theme", "theme-provider"]`.
 ```ts
 type ThemeToggleProps = { variant?: "icon" | "text"; className?: string };
 // "icon" (default): round button, moon in dark / sun in light, small spin on swap
@@ -79,7 +84,7 @@ export type RegistryItem = {
 };
 export const registry: RegistryItem[];
 ```
-Item `theme` = the CSS file above (target `mpkcn-theme.css`). Every component lists `"theme"` in `registryDependencies`.
+Item `theme` = the CSS file above (target `mpkcn-theme.css`). Every component lists `"theme"` in `registryDependencies`. Item `theme-provider` = `theme-provider.tsx` (npm dependency `next-themes`).
 
 The docs site serves, as static files at build time:
 - `/r/index.json` → `{ name, title, description }[]`
@@ -87,10 +92,11 @@ The docs site serves, as static files at build time:
 
 Default registry URL for the CLI: `https://blhasn-sehli.github.io/mpkcn/r` (GitHub Pages; the site uses `basePath` from env `NEXT_PUBLIC_BASE_PATH`, empty locally). The CLI accepts `--registry <url>` to override (and a local folder path, for tests).
 
-## 4. CLI contract (`packages/cli`, `mpkcn@0.2.0`)
+## 4. CLI contract (`packages/cli`, `mpkcn@0.3.0`)
 
-- `mpkcn init`: writes the `theme` item, adds `@import "<relative>/mpkcn-theme.css";` right after `@import "tailwindcss"` in the global CSS (detected, or `--css <path>`; never duplicated), and checks `package.json` for React 19, Tailwind 4 and next-themes (warnings only).
-- `mpkcn add <name...>`: resolves `registryDependencies`, writes files (skips existing unless `--overwrite`), runs the init steps quietly when the theme file is missing, installs the npm `dependencies` not already in `package.json` with the detected package manager (`--no-install` prints the command instead; a failed install exits 1), and ends with the import line (`@/` when `tsconfig.json` maps `@/*`).
+- `mpkcn init`: writes the `theme` item, adds `@import "<relative>/mpkcn-theme.css";` right after `@import "tailwindcss"` in the global CSS (detected, or `--css <path>`; never duplicated), and in a Next.js project also writes `theme-provider`, installs `next-themes` and wires the root layout (below). It checks `package.json` for React 19, Tailwind 4 and next-themes, plus the provider and the fonts (warnings only).
+- `mpkcn add <name...>`: resolves `registryDependencies`, writes files (skips existing unless `--overwrite`; the theme and provider files are left alone once present), runs the init steps quietly when the theme file is missing, wires the root layout, installs the npm `dependencies` not already in `package.json` with the detected package manager (`--no-install` prints the command instead; a failed install exits 1), and ends with the import line (`@/` when `tsconfig.json` maps `@/*`).
+- Root layout (`src/app/layout.tsx` or `app/layout.tsx`, also `.jsx`/`.js`), only when `next` is a dependency: loads Space Grotesk and JetBrains Mono with `next/font/google` (variables `--font-space-grotesk` / `--font-jetbrains-mono` on `<html>`) and, when the items include `theme-provider`, wraps `{children}` in `<MpkcnThemeProvider>` and adds `suppressHydrationWarning` to `<html>`. Text edits only on the simple create-next-app shape (one `<html>`, one `<body>` whose only content is `{children}`, a `className` that is absent, a string or a single template literal); a layout that already has a `ThemeProvider` / `next-themes` or the font variables is left alone. Anything else: nothing is written and the lines to paste are printed. Idempotent. `--no-layout` never edits the layout; `--no-fonts` skips the fonts. Without Next.js, nothing is edited: the CLI prints the provider usage and a Google Fonts `@import` line.
 - Zero runtime dependencies. The package manager runs through `node:child_process` (`shell` only on Windows for the `.cmd` shims); package specs are validated first.
 
 ## 5. Rules for contributors

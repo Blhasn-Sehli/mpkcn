@@ -18,6 +18,13 @@ export function SiteFooter() {
           <Link href="/docs/cli/" className="hover:text-mpk-ink">
             cli
           </Link>
+          <Link href="/docs/ai/" className="hover:text-mpk-ink">
+            ai
+          </Link>
+          {/* A static file, not a page: a plain link with the base path. */}
+          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/llms.txt`} className="hover:text-mpk-ink">
+            llms.txt
+          </a>
           <a href={siteConfig.github} target="_blank" rel="noreferrer" className="hover:text-mpk-ink">
             github
           </a>

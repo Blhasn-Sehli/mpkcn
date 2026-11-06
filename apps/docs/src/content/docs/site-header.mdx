@@ -1,0 +1,99 @@
+import { SiteHeaderDemo } from "@/components/demos/site-header-demo";
+
+<ComponentPreview name="site-header">
+  <SiteHeaderDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="site-header" />
+
+## Usage
+
+A sticky top bar: your logo on the left, numbered links in the middle, your own buttons on the right. Tell it which link is `current`.
+
+```tsx
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { SiteHeader } from "@/components/mpkcn/site-header";
+import { ThemeToggle } from "@/components/mpkcn/theme-toggle";
+
+export function Header() {
+  const pathname = usePathname();
+  return (
+    <SiteHeader
+      logo="mysite"
+      linkComponent={Link}
+      links={[
+        { label: "home", href: "/" },
+        { label: "docs", href: "/docs" },
+        { label: "blog", href: "/blog" },
+      ]}
+      current={pathname}
+      actions={<ThemeToggle />}
+    />
+  );
+}
+```
+
+`current` is compared with each link's `id`, then its `href`, then its `label`. Pass next/link's `Link` as `linkComponent` for client-side navigation; without it, links are plain `<a>`.
+
+## Examples
+
+### Narrow widths
+
+Below 672px of its own width (a container query, not the viewport) the links move into a menu that drops down under the bar. `menuFooter` adds your own content at its bottom.
+
+<ComponentPreview
+  name="site-header"
+  code={`<SiteHeader
+  logo="mysite"
+  links={links}
+  current="docs"
+  menuFooter={<a href="https://github.com/you">github</a>}
+/>`}
+>
+  <div className="w-full max-w-[380px]">
+    <SiteHeaderDemo />
+  </div>
+</ComponentPreview>
+
+### Plain bar
+
+Turn off the numbers and the cursor, and let the header hide while the page scrolls down.
+
+<ComponentPreview
+  name="site-header"
+  code={`<SiteHeader logo="mysite" links={links} numbered={false} cursor={false} hideOnScroll />`}
+>
+  <SiteHeaderDemo numbered={false} cursor={false} />
+</ComponentPreview>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "links", type: "{ label; href?; onSelect?; id? }[]", default: "—", description: "Links, left to right. With `href` they are links, with only `onSelect` buttons." },
+    { prop: "current", type: "string", default: "—", description: "id, href or label of the active link." },
+    { prop: "logo", type: "ReactNode", default: '"~/"', description: "Logo slot: text, an image or any element." },
+    { prop: "logoHref", type: "string", default: '"/"', description: "Where the logo points." },
+    { prop: "logoLabel", type: "string", default: "—", description: "Accessible name of the logo link when the logo is not text." },
+    { prop: "cursor", type: "boolean", default: "true", description: "Blinking block cursor after the logo." },
+    { prop: "numbered", type: "boolean", default: "true", description: "Show 01, 02… before each link." },
+    { prop: "actions", type: "ReactNode", default: "—", description: "Slot on the right, shown at every width." },
+    { prop: "menuFooter", type: "ReactNode", default: "—", description: "Extra content at the bottom of the mobile menu." },
+    { prop: "linkComponent", type: "ComponentType<{ href; className; onClick; … }>", default: '"a"', description: "Your link component, e.g. next/link." },
+    { prop: "sticky", type: "boolean", default: "true", description: "Stick to the top of the nearest scroll container." },
+    { prop: "hideOnScroll", type: "boolean", default: "false", description: "Slide out on window scroll down, come back on scroll up." },
+    { prop: "navLabel", type: "string", default: '"Main"', description: "Accessible name of the nav landmark." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the header." },
+  ]}
+/>
+
+## Accessibility
+
+- Links sit in a `<nav>` landmark with a list; the active one has `aria-current="page"`. Every link and button has a visible amber focus ring.
+- The menu button has `aria-expanded` and `aria-controls`. Opening the menu focuses its first link; Escape closes it and puts focus back on the button, and so does a click outside.
+- The cursor stops blinking, the active marker stops sliding and the header stops sliding away under `prefers-reduced-motion`.

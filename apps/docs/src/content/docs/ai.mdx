@@ -1,0 +1,59 @@
+import { McpSetupTabs } from "@/components/mcp-setup-tabs";
+
+The mpkcn CLI is also an [MCP](https://modelcontextprotocol.io) server. Connect it to your AI assistant once, and you can ask for components in plain words: the assistant finds the right one, reads its source and props, and adds it to your project the same way `npx mpkcn add` does. It writes the files, imports the theme, wires your root layout, installs the npm packages and hands back the import line.
+
+Nothing to install: your assistant starts it with `npx` when it needs it. It requires Node.js 22 or newer.
+
+## Setup
+
+<McpSetupTabs />
+
+<Callout title="On Windows">
+  If the server does not start from a JSON config, run `npx` through `cmd`: `"command": "cmd"` with `"args": ["/c", "npx", "-y", "mpkcn@latest", "mcp"]`.
+</Callout>
+
+`npx mpkcn mcp --help` prints the same snippets in your terminal.
+
+## Try it
+
+Open your project with the assistant and ask:
+
+- "Add a terminal boot screen to my site."
+- "Add a boot screen to my landing page, only the first time someone visits."
+- "Which mpkcn component fits a status bar?"
+- "Show me the props of the command palette, then add it with Ctrl+K."
+- "Set up mpkcn in this project and tell me what is missing."
+- "Add the theme toggle and the scroll progress bar, but don't install anything yet."
+
+A typical run: the assistant calls `list_components` to search, `get_component` to read the source and usage, then `add_components` with your project folder. It gets back the files it created or updated, the packages it installed and the import line, and uses that line in your page.
+
+## Tools
+
+| Tool | What it does | Changes files |
+| --- | --- | --- |
+| `list_components` | Lists every component with its title, one-line description, category, npm dependencies and mpkcn dependencies. An optional `query` filters it, e.g. `"status bar"`. | No |
+| `get_component` | Returns one component's full source files, npm and registry dependencies, the import line, a short usage example and the docs URL. | No |
+| `add_components` | Same as `mpkcn add`. Takes `names`, `cwd` (project root), `overwrite` (default `false`), `install` (default `true`), `layout` (default `true`) and `dir`. Returns the created, updated and skipped files, installed packages, import lines, manual steps and warnings. | Yes |
+| `init_project` | Same as `mpkcn init`. Takes `cwd`, `install`, `layout` and `overwrite`. Returns the files and the project checks (React 19, Tailwind CSS 4, next-themes, provider, fonts). | Yes |
+
+`cwd` must be a folder with a `package.json`. It defaults to the folder the assistant starts the server in, which is your project for Claude Code, Cursor and VS Code.
+
+## Security
+
+<Callout type="warn" title="It only writes when asked">
+  `list_components` and `get_component` are read-only. `add_components` and `init_project` write files and run your package manager, and only when the assistant calls them for something you asked for. Most assistants show you each tool call and ask before running it.
+</Callout>
+
+- It runs on your machine, over stdio. There is no account, key or telemetry. The server itself only downloads component JSON from the registry; npm packages come through your own package manager.
+- Files are written only inside the components folder of the project you name. Item names must match `[a-z0-9-]+`, and file targets that are absolute or leave that folder are rejected before anything is written.
+- npm package names from the registry are validated before they reach your package manager. The package manager's output goes to the server log, never into the protocol.
+- Existing files are skipped unless the assistant passes `overwrite: true`. The root layout is only edited when it has the standard `create-next-app` shape; otherwise the tool returns the lines to add.
+- Pass `install: false` to see the install command without running it.
+
+## Custom registry
+
+The server reads the public registry by default. To point it at your own (a URL or a local folder of `index.json` and `<name>.json` files), add `--registry <url>` after `mcp`, or set the `MPKCN_REGISTRY` environment variable in the server config.
+
+## llms.txt
+
+For assistants that read docs instead of calling tools, the site publishes [llms.txt](https://blhasn-sehli.github.io/mpkcn/llms.txt), an index of every docs page and registry file, and [llms-full.txt](https://blhasn-sehli.github.io/mpkcn/llms-full.txt), every page as plain Markdown in one file. Paste either link into a chat to give it the whole kit.

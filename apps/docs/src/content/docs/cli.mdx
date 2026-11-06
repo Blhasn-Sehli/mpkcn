@@ -6,11 +6,10 @@ Run it with `npx`, no install needed. It requires Node.js 22 or newer and has no
 npx mpkcn <command> [options]
 ```
 
-The usual flow is two commands:
+The usual flow is one command. The first `add` sets up everything it needs:
 
 ```bash
-npx mpkcn init
-npx mpkcn add boot-screen
+npx mpkcn add theme-toggle
 ```
 
 ## init
@@ -25,7 +24,8 @@ npx mpkcn init
 
 - writes `mpkcn-theme.css` to the components folder (skipped if it is already there);
 - adds `@import "<relative path>/mpkcn-theme.css";` to your global CSS, right after `@import "tailwindcss"`. It never adds it twice;
-- checks `package.json` for React 19, Tailwind CSS 4 and next-themes, and prints a `warn` line with the fix for anything missing or too old.
+- in a Next.js app, writes `theme-provider.tsx`, installs `next-themes` and wires your root layout (see [Root layout](#root-layout));
+- checks `package.json` for React 19, Tailwind CSS 4 and next-themes, then the theme provider and the fonts, and prints a `warn` line with the fix for anything missing or too old.
 
 It looks for the global CSS at the usual Next.js and Vite paths (`src/app/globals.css`, `app/globals.css`, `src/styles/globals.css`, `src/index.css`, …), then in any CSS file that has `@import "tailwindcss"`. Pass `--css <path>` to choose the file. If none is found, it prints the exact line to add.
 
@@ -42,15 +42,20 @@ npx mpkcn add theme-toggle reveal
 
 For each item, `add`:
 
-- resolves its `registryDependencies` (every component pulls in `theme`, the `mpkcn-theme.css` file);
+- resolves its `registryDependencies` (every component pulls in `theme`, the `mpkcn-theme.css` file; `theme-toggle` also pulls in `theme-provider`);
 - writes the files to the target folder, keeping sub-folders such as `lib/matrix-rain.ts`;
 - skips files that already exist, unless you pass `--overwrite`;
+- in a Next.js app, loads the fonts and (when an item needs it) the theme provider in your root layout;
 - installs the npm packages your `package.json` does not list yet, with the package manager it detects (the `packageManager` field, then `pnpm-lock.yaml`, `yarn.lock`, `bun.lock` or `package-lock.json`; npm otherwise). The install output streams to your terminal;
 - ends with the import line to paste, using the `@/` alias when your `tsconfig.json` has it.
 
 ```txt
-Adding theme-toggle
+Adding theme-toggle (+ theme, theme-provider)
+  created     src/components/mpkcn/mpkcn-theme.css
+  created     src/components/mpkcn/theme-provider.tsx
   created     src/components/mpkcn/theme-toggle.tsx
+  updated     src/app/globals.css  (+ @import "../components/mpkcn/mpkcn-theme.css";)
+  updated     src/app/layout.tsx  (+ fonts, theme provider)
 
 Installing dependencies
   npm install next-themes
@@ -63,6 +68,19 @@ Done. Use it:
 If the install fails, `add` prints the command to run yourself and exits with code 1. The files stay in place.
 
 Item names must match `[a-z0-9-]+`. Every file target is checked before anything is written: absolute paths and paths that leave the target folder are rejected. npm package names from the registry are checked too before they reach your package manager.
+
+## Root layout
+
+In a Next.js app (`next` in `package.json`), `init` and `add` update `src/app/layout.tsx` (or `app/layout.tsx`) so nothing is left to do by hand:
+
+- **Fonts:** imports `Space_Grotesk` and `JetBrains_Mono` from `next/font/google`, declares them with the variables `--font-space-grotesk` and `--font-jetbrains-mono`, and adds those to the `className` of `<html>`. The theme's `font-mpk-sans` and `font-mpk-mono` read them.
+- **Theme provider** (for `theme-toggle` and anything else that uses `next-themes`): imports `MpkcnThemeProvider`, wraps `{children}` in `<body>` with it and adds `suppressHydrationWarning` to `<html>`.
+
+The change shows as one line, `updated     src/app/layout.tsx  (+ fonts, theme provider)`. It is idempotent: a layout that already has the provider or the fonts is not changed again.
+
+The CLI only edits a layout with the simple `create-next-app` shape: one `<html>`, one `<body>` whose only content is `{children}`, and a `className` on `<html>` that is absent, a string or a template literal. It leaves alone a layout that already uses its own `ThemeProvider` or `next-themes`. For anything else it writes nothing and prints the exact lines to paste.
+
+Without Next.js, nothing is edited: `add` prints where to put the provider and a Google Fonts `@import` line for the top of your global CSS.
 
 ## list
 
@@ -81,6 +99,8 @@ npx mpkcn list
 | `-r, --registry <url>` | Registry URL, or a local folder | `https://blhasn-sehli.github.io/mpkcn/r` |
 | `-o, --overwrite` | Replace files that already exist | off |
 | `--no-install` | Do not install npm packages, only print the command | off |
+| `--no-layout` | Never edit the root layout; print the lines to add instead | off |
+| `--no-fonts` | Do not load the fonts | off |
 | `-y, --yes` | Non-interactive (mpkcn never prompts; accepted for scripts) | off |
 | `-h, --help` | Show usage | |
 | `-v, --version` | Show the version | |
@@ -108,6 +128,15 @@ npx mpkcn add reveal --no-install
 ```txt
 Install the npm dependencies:
   npm install framer-motion
+```
+
+### --no-layout and --no-fonts
+
+Keep your root layout exactly as it is (for example when your provider lives in another file), or skip the fonts:
+
+```bash
+npx mpkcn add theme-toggle --no-layout
+npx mpkcn add boot-screen --no-fonts
 ```
 
 ### --registry

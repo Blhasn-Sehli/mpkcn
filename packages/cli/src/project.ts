@@ -35,6 +35,11 @@ export function majorOf(range: string): number | undefined {
   return m ? Number(m[1]) : undefined;
 }
 
+/** True when package.json lists the `next` package. */
+export function isNextProject(cwd: string): boolean {
+  return declaredDependencies(readPackageJson(cwd)).has("next");
+}
+
 export type Check = { ok: boolean; message: string };
 
 type Requirement = { name: string; major?: number; label: string; why: string; fix: (pm: Fix) => string };

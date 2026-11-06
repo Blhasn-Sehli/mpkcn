@@ -1,0 +1,112 @@
+import { FileExplorerDemo } from "@/components/demos/file-explorer-demo";
+
+<ComponentPreview name="file-explorer">
+  <FileExplorerDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="file-explorer" />
+
+## Usage
+
+Give it a tree of folders (nodes with `children`) and files. Each folder opens in the next column; the selected file shows in the preview pane.
+
+```tsx
+import { FileExplorer } from "@/components/mpkcn/file-explorer";
+
+const tree = [
+  {
+    name: "projects",
+    children: [
+      {
+        name: "atlas",
+        meta: "2026",
+        description: "A map viewer that works offline.",
+        image: { src: "/shots/atlas.png", alt: "Atlas map view" },
+        details: [
+          { label: "status", value: "shipped" },
+          { label: "stack", value: "Next.js, MapLibre" },
+        ],
+        href: "https://atlas.example.com",
+      },
+    ],
+  },
+  { name: "readme.md", description: "Hello." },
+];
+
+export function Projects() {
+  return <FileExplorer items={tree} defaultPath={["projects", "atlas"]} />;
+}
+```
+
+The built-in preview shows `image`, the name, `description`, `details` and an `href` link. Give one file a `preview` to replace it, or pass `renderPreview` to draw every preview yourself.
+
+## Examples
+
+### Open a file
+
+`onOpen` runs on Enter or double click on a file, and adds an "open" button to the preview. In the demo above it opens the project pictures in a [Media Lightbox](/docs/components/media-lightbox/).
+
+```tsx
+<FileExplorer items={tree} onOpen={(node) => router.push(`/work/${node.id}`)} />
+```
+
+### Narrow widths
+
+Below 672px of its own width (a container query), it shows one column at a time above the preview, with a `‹ ..` button to go back up.
+
+<ComponentPreview
+  name="file-explorer"
+  code={`<FileExplorer items={tree} height={300} />`}
+>
+  <div className="w-full max-w-[380px]">
+    <FileExplorerDemo compact height={300} />
+  </div>
+</ComponentPreview>
+
+### Your own preview
+
+`renderPreview` gets the selected file and the path to it.
+
+<ComponentPreview
+  name="file-explorer"
+  code={`<FileExplorer
+  items={tree}
+  filter={false}
+  renderPreview={(node, path) => (
+    <p>
+      $ stat {path.map((n) => n.name).join("/")}
+    </p>
+  )}
+/>`}
+>
+  <FileExplorerDemo compact customPreview filter={false} />
+</ComponentPreview>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "items", type: "FileNode[]", default: "—", description: "Top-level files and folders. A node with `children` is a folder." },
+    { prop: "root", type: "string", default: '"~"', description: "Root shown at the start of the path bar." },
+    { prop: "defaultPath", type: "string[]", default: "first at each level", description: "Ids (or names) of the starting selection, top level first." },
+    { prop: "maxColumns", type: "number", default: "3", description: "Most columns side by side on wide screens." },
+    { prop: "height", type: "number | string", default: "420", description: "Height of the browser body." },
+    { prop: "onSelect", type: "(node, path) => void", default: "—", description: "Called when the selected file changes." },
+    { prop: "onOpen", type: "(node, path) => void", default: "—", description: "Called on Enter or double click on a file." },
+    { prop: "renderPreview", type: "(node, path) => ReactNode", default: "—", description: "Your own preview for every file." },
+    { prop: "filter", type: "boolean", default: "true", description: "Let / open a filter box." },
+    { prop: "label", type: "string", default: '"File explorer"', description: "Accessible name of the whole browser." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the outer box." },
+  ]}
+/>
+
+`FileNode` is `{ name; id?; meta?; children?; keywords?; description?; image?: { src; alt? }; details?: { label; value }[]; href?; preview? }`. `id` defaults to `name` and only needs to be unique among its siblings.
+
+## Accessibility
+
+- Each column is a `listbox` named after its folder, and each row an `option` with `aria-selected`. Only the selected row of each column is in the Tab order, so Tab moves from column to column and then into the preview.
+- ↑ ↓ Home End move, → or Enter go into a folder (Enter on a file calls `onOpen`, → moves to the preview), ← or Esc go back. / opens the filter; Esc clears it and Enter jumps to the results. The match count is a `status` region.
+- The preview is a labelled region you can focus and scroll with the keyboard.
+- The picture wipe and the blinking row cursor are skipped under `prefers-reduced-motion`.

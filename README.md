@@ -18,24 +18,36 @@
 
 ## Components
 
-24 components, all running live in the **[gallery](https://blhasn-sehli.github.io/mpkcn/components/)**:
+35 components, all running live in the **[gallery](https://blhasn-sehli.github.io/mpkcn/components/)**:
 
 | Group | Components |
 | --- | --- |
 | Intro & theme | boot-screen, theme-toggle |
-| Terminal | terminal-window, terminal-shell, command-palette, shortcuts-dialog, tmux-bar, terminal-form, konami |
+| Terminal | terminal-window, terminal-shell, command-palette, shortcuts-dialog, tmux-bar, terminal-form, konami, fetch-card, env-card |
+| Navigation | site-header, prompt-footer, file-explorer, scroll-hint |
+| Cards & media | case-card, tech-stack, arch-diagram, media-lightbox, parallax-image |
 | Effects | cursor, grain, spotlight, scene-canvas, ascii-image, letter-reveal, reveal |
 | Text & layout | kbd, eyebrow, section-divider, section-rail, image-placeholder, feature-list, scroll-progress, back-to-top |
 
 ## Quick start
 
 ```bash
-npx mpkcn add boot-screen
+npx mpkcn add theme-toggle
 ```
 
-Then import the theme once in your global CSS and use the component. Full guide: [Installation](https://blhasn-sehli.github.io/mpkcn/docs/installation/).
+That is the whole setup. In a Next.js app, the first command writes the component, the theme and the theme provider, imports the theme in your global CSS, loads Space Grotesk and JetBrains Mono with `next/font`, wraps your root layout in the provider, and installs `next-themes`. Then import the component and use it. Full guide: [Installation](https://blhasn-sehli.github.io/mpkcn/docs/installation/).
 
 **Requirements:** React 19, Next.js 15+ (16 recommended), Tailwind CSS 4, Node.js 22+ for the CLI.
+
+## Use with AI
+
+Let your assistant add components for you. The CLI is also an MCP server:
+
+```bash
+claude mcp add mpkcn -- npx -y mpkcn@latest mcp
+```
+
+Then ask "add a terminal boot screen to my landing page". Cursor, VS Code, Windsurf and Claude Desktop configs: [Use with AI](https://blhasn-sehli.github.io/mpkcn/docs/ai/). The docs are also published as [llms.txt](https://blhasn-sehli.github.io/mpkcn/llms.txt) and [llms-full.txt](https://blhasn-sehli.github.io/mpkcn/llms-full.txt).
 
 ## Repository
 

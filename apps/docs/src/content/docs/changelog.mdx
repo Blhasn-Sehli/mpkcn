@@ -1,3 +1,19 @@
+## 0.4.0
+
+CLI `mpkcn@0.3.0`: no manual steps left, 11 new components (35 in total), and setup from your AI assistant.
+
+- **New components:** `site-header`, `prompt-footer`, `file-explorer`, `scroll-hint` (Navigation); `case-card`, `tech-stack`, `arch-diagram` (Cards); `media-lightbox`, `parallax-image` (Media); `fetch-card`, `env-card` (Terminal).
+
+- **Theme provider:** new `theme-provider` item, `MpkcnThemeProvider` (next-themes with `attribute="class"`, dark first, dark and light only, no transition flash). `theme-toggle` depends on it, and the CLI wraps your root layout in it and adds `suppressHydrationWarning` to `<html>`.
+- **Fonts:** in a Next.js app the CLI loads Space Grotesk and JetBrains Mono with `next/font` in your root layout. The theme's `--font-mpk-sans` / `--font-mpk-mono` now read the `next/font` variables first, then the font names and system fonts, so existing setups keep working. A 0.2 theme file is upgraded in place when its font lines are untouched.
+- **Safe edits:** the layout is only edited when it has the simple `create-next-app` shape; a layout that already has a `ThemeProvider` or the fonts is left alone, and anything unusual gets the exact lines to paste instead. Every edit is idempotent and shows as one `updated` line.
+- **Flags:** `--no-layout` never edits the layout, `--no-fonts` skips the fonts.
+- **Other frameworks:** without Next.js nothing is edited; the CLI prints where to put the provider and a Google Fonts `@import` line.
+- **`init`:** in a Next.js app it also sets up the provider and fonts, and checks both.
+- **Docs:** [Installation](/docs/installation/) is now one command, with the manual steps kept below it.
+- **Use with AI:** `mpkcn mcp` is an MCP server for Claude Code, Cursor, VS Code, Windsurf and Claude Desktop, with four tools: `list_components`, `get_component`, `add_components` and `init_project`. Setup is one line: `claude mcp add mpkcn -- npx -y mpkcn@latest mcp`. Hand-written on stdio, so the CLI still has no runtime dependencies. See [Use with AI](/docs/ai/).
+- **llms.txt:** the site publishes [`llms.txt`](https://blhasn-sehli.github.io/mpkcn/llms.txt) and [`llms-full.txt`](https://blhasn-sehli.github.io/mpkcn/llms-full.txt), built from the registry and the docs. The registry JSON now also carries each item's category, docs URL and usage example.
+
 ## 0.3.0
 
 CLI `mpkcn@0.2.0`: one command, no manual steps.

@@ -1,0 +1,103 @@
+import { PromptFooterDemo } from "@/components/demos/prompt-footer-demo";
+
+<ComponentPreview name="prompt-footer">
+  <PromptFooterDemo />
+</ComponentPreview>
+
+## Installation
+
+<InstallTabs name="prompt-footer" />
+
+## Usage
+
+A footer that reads like a shell session. `ls` prints your link columns, `date` your copyright, and the last prompt waits with a blinking cursor.
+
+```tsx
+import Link from "next/link";
+import { PromptFooter } from "@/components/mpkcn/prompt-footer";
+
+export function Footer() {
+  return (
+    <PromptFooter
+      user="guest"
+      host="mysite.dev"
+      linkComponent={Link}
+      groups={[
+        { title: "sections", links: [{ label: "docs", href: "/docs" }, { label: "blog", href: "/blog" }] },
+        { title: "elsewhere", links: [{ label: "github", href: "https://github.com/you" }] },
+      ]}
+      owner="Your Name"
+      note="built with Next.js"
+    />
+  );
+}
+```
+
+Links that start with `http` open in a new tab. Internal links use `linkComponent` when you pass one (next/link fits), plain `<a>` otherwise.
+
+## Examples
+
+### Now block and clock
+
+`now` prints a few `label: value` lines as `cat now.txt`. `clock` adds a live HH:MM:SS clock on the date line; with `timeZone` and `clockLabel` it can show your own local time.
+
+<ComponentPreview
+  name="prompt-footer"
+  code={`<PromptFooter
+  groups={groups}
+  now={[
+    { label: "building", value: "a terminal UI kit" },
+    { label: "reading", value: "the Next.js 16 docs" },
+  ]}
+  owner="Your Name"
+  clock
+  clockLabel="Paris"
+  timeZone="Europe/Paris"
+/>`}
+>
+  <PromptFooterDemo clockLabel="Paris" timeZone="Europe/Paris" />
+</ComponentPreview>
+
+### Your own last line
+
+Anything you pass as `children` replaces the cursor after the last prompt, for example a status or a small input.
+
+<ComponentPreview
+  name="prompt-footer"
+  code={`<PromptFooter groups={groups} owner="Your Name" backToTop={false}>
+  <span className="text-mpk-blue">all systems normal</span>
+</PromptFooter>`}
+>
+  <PromptFooterDemo compact backToTop={false}>
+    <span className="text-mpk-blue">all systems normal</span>
+  </PromptFooterDemo>
+</ComponentPreview>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "user", type: "string", default: '"guest"', description: "User in the prompt." },
+    { prop: "host", type: "string", default: '"localhost"', description: "Host in the prompt." },
+    { prop: "path", type: "string", default: '"~"', description: "Working directory in the prompt." },
+    { prop: "groups", type: "{ title; links: { label; href }[] }[]", default: "[]", description: "Link columns, printed as the output of ls." },
+    { prop: "now", type: "{ label; value }[]", default: "—", description: "Lines printed as the output of cat now.txt." },
+    { prop: "owner", type: "string", default: "—", description: "Name after the © sign; leave it out to hide the copyright." },
+    { prop: "year", type: "number", default: "current year", description: "Year in the copyright." },
+    { prop: "note", type: "ReactNode", default: "—", description: "Text after the copyright." },
+    { prop: "clock", type: "boolean", default: "false", description: "Live HH:MM:SS clock on the date line." },
+    { prop: "timeZone", type: "string", default: "visitor's own", description: "IANA time zone for the clock." },
+    { prop: "clockLabel", type: "string", default: "—", description: "Text before the clock." },
+    { prop: "backToTop", type: "boolean", default: "true", description: "A cd ~ ↑ button that scrolls the window to the top." },
+    { prop: "children", type: "ReactNode", default: "—", description: "Content after the last prompt, in place of the cursor." },
+    { prop: "linkComponent", type: "ComponentType<{ href; className; children }>", default: '"a"', description: "Your link component for internal links, e.g. next/link." },
+    { prop: "className", type: "string", default: "—", description: "Extra classes for the footer." },
+  ]}
+/>
+
+## Accessibility
+
+- It renders a `<footer>` landmark. Links sit in a `<nav aria-label="Footer">` as plain lists, so the `›` markers are hidden from screen readers.
+- External links say "(opens in a new tab)" to screen readers. The `now` lines are a description list.
+- The clock is not a live region and renders `--:--:--` on the server, so it never interrupts a screen reader and never causes a hydration mismatch.
+- The cursor stops blinking under `prefers-reduced-motion`, and the back-to-top button jumps instead of scrolling smoothly.

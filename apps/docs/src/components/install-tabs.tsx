@@ -18,8 +18,15 @@ function StepTitle({ n, children }: { n: number; children: React.ReactNode }) {
 
 export function InstallTabs({ name }: { name: string }) {
   const item = getRegistryItem(name);
-  const deps = item?.dependencies ?? [];
-  const files = item?.files ?? [{ path: `${name}.tsx`, target: `${name}.tsx` }];
+  // Registry dependencies other than the theme (e.g. theme-provider) are copied too.
+  const extras = (item?.registryDependencies ?? [])
+    .filter((dep) => dep !== "theme")
+    .flatMap((dep) => getRegistryItem(dep) ?? []);
+  const deps = [...new Set([...extras.flatMap((e) => e.dependencies), ...(item?.dependencies ?? [])])];
+  const files = [
+    ...extras.flatMap((e) => e.files),
+    ...(item?.files ?? [{ path: `${name}.tsx`, target: `${name}.tsx` }]),
+  ];
   let step = 0;
 
   return (

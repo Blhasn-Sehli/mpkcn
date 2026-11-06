@@ -4,7 +4,15 @@ import { CliError } from "./errors.js";
 
 export const DEFAULT_REGISTRY = "https://blhasn-sehli.github.io/mpkcn/r";
 
-export type RegistryIndexEntry = { name: string; title: string; description: string };
+export type RegistryIndexEntry = {
+  name: string;
+  title: string;
+  description: string;
+  /** Gallery category, e.g. "Terminal". Only in registries built since the MCP server. */
+  category?: string;
+  dependencies?: string[];
+  registryDependencies?: string[];
+};
 
 export type RegistryItemFile = { target: string; content: string };
 
@@ -15,7 +23,18 @@ export type RegistryItem = {
   dependencies: string[];
   registryDependencies: string[];
   files: RegistryItemFile[];
+  /** Gallery category, when the registry provides it. */
+  category?: string;
+  /** Short usage example from the docs, when the registry provides it. */
+  usage?: string;
+  /** Docs page URL, when the registry provides it. */
+  docs?: string;
 };
+
+/** The registry to use: the --registry flag, then $MPKCN_REGISTRY, then the default. */
+export function registryFrom(flag: string | undefined, env: NodeJS.ProcessEnv = process.env): string {
+  return flag || env.MPKCN_REGISTRY || DEFAULT_REGISTRY;
+}
 
 const NAME_RE = /^[a-z0-9-]+$/;
 
@@ -96,7 +115,14 @@ export function parseItem(data: unknown, expectedName: string): RegistryItem {
     dependencies: deps,
     registryDependencies: regDeps,
     files,
+    ...optionalStrings(d, ["category", "usage", "docs"]),
   };
+}
+
+function optionalStrings<K extends string>(d: Record<string, unknown>, keys: K[]): Partial<Record<K, string>> {
+  const out: Partial<Record<K, string>> = {};
+  for (const k of keys) if (typeof d[k] === "string" && d[k]) out[k] = d[k] as string;
+  return out;
 }
 
 export async function fetchItem(registry: string, name: string, cwd: string): Promise<RegistryItem> {
@@ -114,6 +140,9 @@ export async function fetchIndex(registry: string, cwd: string): Promise<Registr
       name: entry.name,
       title: typeof entry.title === "string" ? entry.title : entry.name,
       description: typeof entry.description === "string" ? entry.description : "",
+      ...optionalStrings(entry, ["category"]),
+      ...(isStringArray(entry.dependencies) ? { dependencies: entry.dependencies } : {}),
+      ...(isStringArray(entry.registryDependencies) ? { registryDependencies: entry.registryDependencies } : {}),
     };
   });
 }

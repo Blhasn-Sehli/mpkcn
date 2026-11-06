@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/build-registry.mjs",
+    "prebuild": "node scripts/build-registry.mjs && node scripts/build-llms.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "registry:build": "node scripts/build-registry.mjs"
+    "registry:build": "node scripts/build-registry.mjs && node scripts/build-llms.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
