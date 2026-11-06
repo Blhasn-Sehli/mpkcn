@@ -1,3 +1,13 @@
+## 0.3.0
+
+CLI `mpkcn@0.2.0`: one command, no manual steps.
+
+- **`mpkcn init`:** writes `mpkcn-theme.css`, adds its `@import` to your global CSS and checks `package.json` for React 19, Tailwind CSS 4 and next-themes, with the fix for anything missing.
+- **Automatic install:** `mpkcn add` installs the npm packages a component needs with your package manager (npm, pnpm, yarn or bun) and skips packages already in `package.json`. `--no-install` only prints the command.
+- **Automatic theme import:** the first `add` finds your global CSS (`src/app/globals.css`, `src/index.css`, … or any file that imports Tailwind) and adds the theme `@import` right after `@import "tailwindcss"`, once. `--css <path>` picks the file.
+- **Next step:** `add` ends with the import line to paste, using the `@/` alias when `tsconfig.json` has it.
+- **Docs:** [Installation](/docs/installation/) is now `npx mpkcn init`, then `npx mpkcn add <name>`, with the manual steps kept as a fallback.
+
 ## 0.2.0
 
 21 new components and a gallery to browse them all.

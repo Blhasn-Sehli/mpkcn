@@ -1,6 +1,6 @@
 {
   "name": "mpkcn",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Add terminal-style React components from the mpkcn registry straight into your project.",
   "license": "MIT",
   "type": "module",

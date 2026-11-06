@@ -87,7 +87,13 @@ The docs site serves, as static files at build time:
 
 Default registry URL for the CLI: `https://blhasn-sehli.github.io/mpkcn/r` (GitHub Pages; the site uses `basePath` from env `NEXT_PUBLIC_BASE_PATH`, empty locally). The CLI accepts `--registry <url>` to override (and a local folder path, for tests).
 
-## 4. Rules for contributors
+## 4. CLI contract (`packages/cli`, `mpkcn@0.2.0`)
+
+- `mpkcn init`: writes the `theme` item, adds `@import "<relative>/mpkcn-theme.css";` right after `@import "tailwindcss"` in the global CSS (detected, or `--css <path>`; never duplicated), and checks `package.json` for React 19, Tailwind 4 and next-themes (warnings only).
+- `mpkcn add <name...>`: resolves `registryDependencies`, writes files (skips existing unless `--overwrite`), runs the init steps quietly when the theme file is missing, installs the npm `dependencies` not already in `package.json` with the detected package manager (`--no-install` prints the command instead; a failed install exits 1), and ends with the import line (`@/` when `tsconfig.json` maps `@/*`).
+- Zero runtime dependencies. The package manager runs through `node:child_process` (`shell` only on Windows for the `.cmd` shims); package specs are validated first.
+
+## 5. Rules for contributors
 - TypeScript strict, no `any` unless unavoidable.
 - Accessible: visible focus, labels on icon buttons, `prefers-reduced-motion` respected.
 - Components use only the mpk- tokens: no hard-coded colors, no box shadows.

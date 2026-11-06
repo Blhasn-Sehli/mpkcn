@@ -1,5 +1,5 @@
 /** Current mpkcn release. Keep in sync with packages/cli/package.json. */
-export const version = "0.2.0";
+export const version = "0.3.0";
 
 export const siteConfig = {
   name: "mpkcn",

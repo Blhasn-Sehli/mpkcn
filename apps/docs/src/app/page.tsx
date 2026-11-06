@@ -50,9 +50,10 @@ const features: { flag: string; title: string; body: string }[] = [
 ];
 
 function TerminalWindow() {
+  // Real output of `mpkcn add boot-screen` (CLI 0.2.0) in a fresh Next.js app.
   const created = (k: number, file: string) => (
     <Fragment key={k}>
-      <span className="text-mpk-blue">{"  created    "}</span>src/components/mpkcn/<span className="text-mpk-ink">{file}</span>
+      <span className="text-mpk-blue">{"  created     "}</span>src/components/mpkcn/<span className="text-mpk-ink">{file}</span>
     </Fragment>
   );
   const lines: ReactNode[] = [
@@ -63,10 +64,15 @@ function TerminalWindow() {
     created(6, "mpkcn-theme.css"),
     created(7, "boot-screen.tsx"),
     created(8, "lib/matrix-rain.ts"),
+    <Fragment key={9}>
+      <span className="text-mpk-blue">{"  updated     "}</span>src/app/<span className="text-mpk-ink">globals.css</span>
+      <span className="text-mpk-dim2">{'  (+ @import "../components/mpkcn/mpkcn-theme.css";)'}</span>
+    </Fragment>,
     <span key={2} className="text-mpk-dim2">&nbsp;</span>,
-    <span key={3} className="text-mpk-dim2">Tip: import the theme once in your global CSS</span>,
+    <span key={3} className="text-mpk-dim">Done. Use it:</span>,
     <Fragment key={4}>
-      <span className="text-mpk-ink">{"  "}@import</span> <span className="text-mpk-amber">&quot;src/components/mpkcn/mpkcn-theme.css&quot;</span>;
+      <span className="text-mpk-ink">{"  "}import</span> {"{ BootScreen }"} <span className="text-mpk-ink">from</span>{" "}
+      <span className="text-mpk-amber">&quot;@/components/mpkcn/boot-screen&quot;</span>;
     </Fragment>,
     <Fragment key={5}>
       <span className="text-mpk-amber">$</span>{" "}
@@ -135,7 +141,7 @@ export default function Home() {
                 className="inline-flex items-center gap-2 border border-mpk-line bg-mpk-bg px-2.5 py-1 font-mpk-mono text-[11px] text-mpk-dim transition-colors hover:border-mpk-amber hover:text-mpk-ink"
               >
                 <span className="size-1.5 bg-mpk-amber" aria-hidden="true" />
-                v{siteConfig.version} · first release
+                v{siteConfig.version} · one-command setup
               </Link>
               <h1 className="mt-6 text-[2.5rem] leading-[1.04] font-semibold tracking-[-0.03em] text-mpk-ink sm:text-6xl lg:text-[4.25rem]">
                 Terminal-style components you <span className="text-mpk-amber">copy</span>, paste and own.

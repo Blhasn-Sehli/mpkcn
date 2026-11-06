@@ -16,27 +16,59 @@
 
 The components are plain React client components. Next.js is the reference setup, but any React 19 app with Tailwind 4 works; only `theme-toggle` expects `next-themes`.
 
-## Set up your project
+## Quick start
+
+Two commands, run from your project root.
 
 <Steps>
 
-### Create a Next.js app with Tailwind 4
-
-Skip this if you already have one. `create-next-app` sets up Tailwind 4 for you.
+### Set up the project
 
 ```bash
-npx create-next-app@latest my-app --typescript --tailwind --app --src-dir
+npx mpkcn init
 ```
 
-### Add next-themes
+`init` writes `mpkcn-theme.css` to your components folder, adds its `@import` to your global CSS right after `@import "tailwindcss"`, and checks your `package.json` for React 19, Tailwind 4 and next-themes:
 
-mpkcn switches themes with a `dark` / `light` class on `<html>`. Install `next-themes`:
+```txt
+Setting up mpkcn
+  created     src/components/mpkcn/mpkcn-theme.css
+  updated     src/app/globals.css  (+ @import "../components/mpkcn/mpkcn-theme.css";)
+
+Checks
+  ok    react ^19.3.0
+  ok    tailwindcss ^4.1.0
+  ok    next-themes ^0.4.6
+
+Ready. Add a component: npx mpkcn add boot-screen  (all of them: npx mpkcn list)
+```
+
+If something is missing, `init` prints a `warn` line with the command that fixes it. It finds the global CSS at the usual Next.js and Vite paths (`src/app/globals.css`, `app/globals.css`, `src/index.css`, `src/styles/globals.css`, …) or in any CSS file that imports Tailwind. Use `--css <path>` to pick the file yourself.
+
+### Add a component
 
 ```bash
-npm i next-themes
+npx mpkcn add boot-screen
 ```
 
-Wrap your app in a provider. It must be a client component:
+`add` writes the component files, installs its npm packages with your package manager (npm, pnpm, yarn or bun, from your lockfile), and ends with the import to paste:
+
+```txt
+Adding boot-screen
+  created     src/components/mpkcn/boot-screen.tsx
+  created     src/components/mpkcn/lib/matrix-rain.ts
+
+Done. Use it:
+  import { BootScreen } from "@/components/mpkcn/boot-screen";
+```
+
+You can skip `init`: the first `add` does the same setup on its own.
+
+</Steps>
+
+## Theme provider
+
+mpkcn switches themes with a `dark` / `light` class on `<html>`, set by `next-themes`. This is the one step the CLI leaves to you, because it touches your layout. Create a client provider:
 
 ```tsx
 "use client";
@@ -69,24 +101,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-### Add the theme file
-
-`mpkcn-theme.css` holds the eight color tokens, the two font stacks and the blink animation as Tailwind 4 theme variables. The CLI writes it for you on the first `add`; to do it now:
-
-```bash
-npx mpkcn add theme
-```
-
-Import it in your global CSS, right after Tailwind:
-
-```css
-@import "tailwindcss";
-@import "../components/mpkcn/mpkcn-theme.css";
-```
-
-This gives you utilities like `bg-mpk-bg`, `text-mpk-ink`, `border-mpk-line`, `text-mpk-amber`, `font-mpk-mono` and `animate-mpk-blink`.
-
-### Load the fonts (optional)
+## Load the fonts (optional)
 
 The tokens ask for **Space Grotesk** and **JetBrains Mono** and fall back to system fonts. With `next/font`, load both and point the token stacks at them:
 
@@ -106,13 +121,44 @@ const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mo
 }
 ```
 
-### Add a component
+## Manual setup
+
+Use this if you prefer to do each step yourself, or if the CLI cannot find your files.
+
+<Steps>
+
+### Create a Next.js app with Tailwind 4
+
+Skip this if you already have one. `create-next-app` sets up Tailwind 4 for you.
 
 ```bash
-npx mpkcn add boot-screen
+npx create-next-app@latest my-app --typescript --tailwind --app --src-dir
 ```
 
-The file lands in `src/components/mpkcn` (or `components/mpkcn` when there is no `src/` folder). Import it like any other component:
+### Install next-themes
+
+```bash
+npm i next-themes
+```
+
+Then add the [theme provider](#theme-provider) above.
+
+### Add the theme file
+
+`mpkcn-theme.css` holds the eight color tokens, the two font stacks and the blink animation as Tailwind 4 theme variables. Copy it from [Theming](/docs/theming/) to `src/components/mpkcn/mpkcn-theme.css`.
+
+Import it in your global CSS, right after Tailwind (the path is relative to the CSS file):
+
+```css
+@import "tailwindcss";
+@import "../components/mpkcn/mpkcn-theme.css";
+```
+
+This gives you utilities like `bg-mpk-bg`, `text-mpk-ink`, `border-mpk-line`, `text-mpk-amber`, `font-mpk-mono` and `animate-mpk-blink`.
+
+### Add a component
+
+Every component page has a **Manual** tab with the source and its npm packages. Copy the files into your components folder, install the packages, then import it:
 
 ```tsx
 import { BootScreen } from "@/components/mpkcn/boot-screen";
@@ -122,4 +168,4 @@ import { BootScreen } from "@/components/mpkcn/boot-screen";
 
 ## What the CLI does
 
-`mpkcn add` downloads the component from the registry at `https://blhasn-sehli.github.io/mpkcn/r`, writes the source files and the theme, skips files that already exist, then prints the npm packages the component needs. It never edits your config or installs packages for you. See [CLI](/docs/cli/) for every option.
+`mpkcn add` downloads the component from the registry at `https://blhasn-sehli.github.io/mpkcn/r` and writes the source files, skipping files that already exist. On the first run it also writes the theme and adds the theme `@import` to your global CSS, once. It then installs the npm packages your `package.json` does not list yet, with your package manager. Pass `--no-install` to only print the install command. See [CLI](/docs/cli/) for every option.

@@ -22,7 +22,7 @@ const pages: DocPage[] = [
     slug: "installation",
     href: "/docs/installation/",
     title: "Installation",
-    description: "Set up Tailwind 4, next-themes and the mpkcn tokens, then add your first component.",
+    description: "Run npx mpkcn init, then npx mpkcn add <name>. The CLI writes the theme, wires your CSS and installs the packages.",
     section: "Getting started",
   },
   {
@@ -36,7 +36,7 @@ const pages: DocPage[] = [
     slug: "cli",
     href: "/docs/cli/",
     title: "CLI",
-    description: "Use the mpkcn CLI to list components and copy them into your project.",
+    description: "Use the mpkcn CLI to set up your project, add components and install what they need.",
     section: "Getting started",
   },
   {
