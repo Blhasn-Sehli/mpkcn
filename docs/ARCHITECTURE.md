@@ -1,4 +1,6 @@
-# mpkcn build contract (shared by everyone building v0.1)
+# mpkcn architecture
+
+How the kit is put together: tokens, components, registry format and CLI contract.
 
 mpkcn is a terminal-style React UI kit, distributed shadcn-style: `npx mpkcn add boot-screen` copies a component's source into the user's project. Design source: MpK's portfolio (dark default, amber + blue accents, square corners, hairline borders, no box shadows, Space Grotesk + JetBrains Mono).
 
@@ -85,8 +87,8 @@ The docs site serves, as static files at build time:
 
 Default registry URL for the CLI: `https://blhasn-sehli.github.io/mpkcn/r` (GitHub Pages; the site uses `basePath` from env `NEXT_PUBLIC_BASE_PATH`, empty locally). The CLI accepts `--registry <url>` to override (and a local folder path, for tests).
 
-## 4. Rules for everyone
-- Only edit the files your task owns. Don't change `CONTRACT.md`.
-- TypeScript strict, no `any` unless unavoidable. Accessible: visible focus, labels on icon buttons, `prefers-reduced-motion` respected.
-- No new dependencies beyond those already in `apps/docs/package.json`, except where your task says so.
-- Commit nothing; the lead integrates and commits.
+## 4. Rules for contributors
+- TypeScript strict, no `any` unless unavoidable.
+- Accessible: visible focus, labels on icon buttons, `prefers-reduced-motion` respected.
+- Components use only the mpk- tokens: no hard-coded colors, no box shadows.
+- Every component is documented (preview, install, props, accessibility) before release.
