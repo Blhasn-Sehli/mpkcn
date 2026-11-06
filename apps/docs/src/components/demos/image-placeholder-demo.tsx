@@ -18,7 +18,7 @@ export function ImagePlaceholderDemo({ compact = false }: { compact?: boolean })
       </div>
       {!compact && (
         <div className={cell}>
-          <ImagePlaceholder src="/does-not-exist.png" alt="Missing image" label="404: file missing" className="w-full" />
+          <ImagePlaceholder src="data:image/png;base64,AAAA" alt="Broken image" label="load failed: fallback shown" className="w-full" />
           <span className={caption}>broken src</span>
         </div>
       )}

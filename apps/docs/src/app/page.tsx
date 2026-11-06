@@ -179,7 +179,7 @@ export default function Home() {
           <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="font-mpk-mono text-xs text-mpk-amber">$ mpkcn list</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-mpk-ink sm:text-4xl">Three components, live.</h2>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-mpk-ink sm:text-4xl">A few of the 24, live.</h2>
             </div>
             <div className="flex max-w-md flex-col items-start gap-3 sm:items-end sm:text-right">
               <p className="text-sm leading-6 text-mpk-dim">
