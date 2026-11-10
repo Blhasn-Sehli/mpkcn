@@ -34,11 +34,13 @@ export const metadata: Metadata = {
     title: "mpkcn — Terminal-style React components",
     description: siteConfig.description,
     url: "./",
+    images: [{ url: "og.png", width: 1200, height: 630, alt: "mpkcn: terminal-style React components you copy, paste and own" }],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "mpkcn — Terminal-style React components",
     description: siteConfig.description,
+    images: ["og.png"],
   },
 };
 

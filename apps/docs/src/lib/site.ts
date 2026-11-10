@@ -7,7 +7,7 @@ export const siteConfig = {
   url: "https://blhasn-sehli.github.io/mpkcn",
   github: "https://github.com/Blhasn-Sehli/mpkcn",
   description:
-    "Terminal-style React components you copy, paste and own. A boot screen, a theme toggle and scroll reveals, built on Tailwind 4 tokens.",
+    "Terminal-style React components you copy, paste and own. 35 components (boot screens, command palettes, file explorers, tmux bars), set up with one command or by asking your AI assistant.",
 };
 
 /** npm packages the components depend on, with the version the docs and registry are tested with. */
