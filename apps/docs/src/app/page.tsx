@@ -7,6 +7,7 @@ import { RevealDemo } from "@/components/demos/reveal-demo";
 import { ThemeToggleDemo } from "@/components/demos/theme-toggle-demo";
 import { ArrowRightIcon } from "@/components/icons";
 import { SiteFooter } from "@/components/site-footer";
+import { VideoShowcase } from "@/components/video-showcase";
 import { siteConfig, testedVersions } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -181,6 +182,22 @@ export default function Home() {
             </div>
 
             <TerminalWindow />
+          </div>
+        </section>
+
+        {/* Video */}
+        <section className="mx-auto max-w-[90rem] px-4 pt-20 sm:px-6 lg:px-8 lg:pt-28">
+          <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="font-mpk-mono text-xs text-mpk-amber">$ mpkcn --demo</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-mpk-ink sm:text-4xl">See it in action.</h2>
+            </div>
+            <p className="max-w-md text-sm leading-6 text-mpk-dim sm:text-right">
+              A quick silent overview, or a walkthrough with voice: one command, the components, and adding them from your AI assistant.
+            </p>
+          </div>
+          <div className="mx-auto max-w-5xl">
+            <VideoShowcase />
           </div>
         </section>
 

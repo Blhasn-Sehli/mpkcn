@@ -8,6 +8,11 @@
 
 [![CI](https://github.com/Blhasn-Sehli/mpkcn/actions/workflows/ci.yml/badge.svg)](https://github.com/Blhasn-Sehli/mpkcn/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-e8a33d.svg)](LICENSE)
+[![npm](https://img.shields.io/npm/v/mpkcn?color=e8a33d)](https://www.npmjs.com/package/mpkcn)
+
+<a href="https://blhasn-sehli.github.io/mpkcn/"><img src="docs/media/mpkcn-preview.gif" alt="mpkcn: terminal-style components, set up with one command" width="800"></a>
+
+<sub>▶ Watch the full overview and the voiced walkthrough on the <a href="https://blhasn-sehli.github.io/mpkcn/">website</a>.</sub>
 
 </div>
 
