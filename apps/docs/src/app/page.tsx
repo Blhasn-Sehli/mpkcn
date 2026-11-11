@@ -7,7 +7,7 @@ import { RevealDemo } from "@/components/demos/reveal-demo";
 import { ThemeToggleDemo } from "@/components/demos/theme-toggle-demo";
 import { ArrowRightIcon } from "@/components/icons";
 import { SiteFooter } from "@/components/site-footer";
-import { VideoShowcase } from "@/components/video-showcase";
+import { AutoVideo } from "@/components/video-showcase";
 import { siteConfig, testedVersions } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -193,11 +193,11 @@ export default function Home() {
               <h2 className="mt-3 text-3xl font-semibold tracking-tight text-mpk-ink sm:text-4xl">See it in action.</h2>
             </div>
             <p className="max-w-md text-sm leading-6 text-mpk-dim sm:text-right">
-              A quick silent overview, or a walkthrough with voice: one command, the components, and adding them from your AI assistant.
+              48 seconds: one command sets everything up, then the components, then adding them from your AI assistant.
             </p>
           </div>
           <div className="mx-auto max-w-5xl">
-            <VideoShowcase />
+            <AutoVideo name="walkthrough" title="~/mpkcn/walkthrough.mp4" voiced label="mpkcn walkthrough with narration and captions" />
           </div>
         </section>
 
@@ -238,6 +238,23 @@ export default function Home() {
                 <RevealDemo compact stagger={0.1} />
               </div>
             </DemoCard>
+          </div>
+        </section>
+
+        {/* Overview video */}
+        <section className="border-t border-mpk-line">
+          <div className="mx-auto grid max-w-[90rem] gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[1fr_1.6fr] lg:items-center lg:gap-16 lg:px-8 lg:py-28">
+            <div>
+              <p className="font-mpk-mono text-xs text-mpk-amber">$ mpkcn --overview</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-mpk-ink sm:text-4xl">
+                35 components in <span className="text-mpk-amber">37 seconds.</span>
+              </h2>
+              <p className="mt-4 max-w-md text-sm leading-6 text-mpk-dim">
+                Why every portfolio looks the same, what mpkcn does about it, and how one command (or your AI assistant)
+                puts it in your project.
+              </p>
+            </div>
+            <AutoVideo name="overview" title="~/mpkcn/overview.mp4" label="mpkcn overview, silent motion graphics" />
           </div>
         </section>
 
