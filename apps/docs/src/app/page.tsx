@@ -254,7 +254,7 @@ export default function Home() {
                 puts it in your project.
               </p>
             </div>
-            <AutoVideo name="overview" title="~/mpkcn/overview.mp4" label="mpkcn overview, silent motion graphics" />
+            <AutoVideo name="overview" title="~/mpkcn/overview.mp4" voiced label="mpkcn overview, motion graphics with music" />
           </div>
         </section>
 
